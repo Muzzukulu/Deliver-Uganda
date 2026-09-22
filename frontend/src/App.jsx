@@ -1,3 +1,4 @@
+import LiveChat from './components/LiveChat'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
@@ -7,6 +8,7 @@ import Packages from "./pages/Packages.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import Register from "./pages/Register.jsx";
 import Orders from "./pages/Orders.jsx";
+import AdminChat from './pages/AdminChat'
 
 export default function App() {
   return (
@@ -21,7 +23,11 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/register" element={<Register />} />
         <Route path="/driver/register" element={<Register />} />
+		// inside Routes
+		<Route path="/admin" element={<AdminChat />} />
       </Routes>
+      <LiveChat />
     </BrowserRouter>
   );
 }
+

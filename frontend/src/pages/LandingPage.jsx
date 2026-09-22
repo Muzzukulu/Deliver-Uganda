@@ -1,14 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import truckImg from '../images/truck.jpg'
 import logo from '../images/logo.png'
-import liveChat from '../images/Live-Chat.png'
 
 export default function LandingPage() {
   const navigate = useNavigate();
 
   return (
     <div className="w-full bg-[#faf7ff] font-['Nunito'] overflow-x-hidden">
-      {/* NAVBAR - FIXED LOGIN BUTTON */}
+      {/* NAVBAR */}
       <nav className="w-full h-[72px] bg-white flex items-center justify-between px-6 lg:px-12 shadow-sm sticky top-0 z-50">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
           <img src={logo} alt="logo" className="h-10 w-auto" />
@@ -44,10 +43,10 @@ export default function LandingPage() {
         <h2 className="font-['Poppins'] font-bold text-[30px] text-[#4a2d7a] text-center mb-12">Why Choose Deliver Uganda</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 max-w-[1200px] mx-auto">
           {[
-  {icon:'💰', title:'Affordable Rates', desc:'Transparent, competitive pricing that delivers real value for individuals and businesses without compromising service quality.'},
-  {icon:'👨‍✈️', title:'Professional Drivers', desc:'Verified and trained drivers committed to safety, reliability, and professional customer service at every delivery stage.'},
-  {icon:'🇺🇬', title:'Nationwide Coverage', desc:'Extensive delivery network reaching cities and towns across Uganda, ensuring dependable service wherever you operate.'},
-  {icon:'🎧', title:'24/7 Support', desc:'Always-available support teams providing timely assistance, tracking updates, and resolution whenever you need help.'},
+            {icon:'💰', title:'Affordable Rates', desc:'Transparent, competitive pricing that delivers real value for individuals and businesses without compromising service quality.'},
+            {icon:'👨‍✈️', title:'Professional Drivers', desc:'Verified and trained drivers committed to safety, reliability, and professional customer service at every delivery stage.'},
+            {icon:'🇺🇬', title:'Nationwide Coverage', desc:'Extensive delivery network reaching cities and towns across Uganda, ensuring dependable service wherever you operate.'},
+            {icon:'🎧', title:'24/7 Support', desc:'Always-available support teams providing timely assistance, tracking updates, and resolution whenever you need help.'},
           ].map((f,i)=>(
             <div key={i} className="text-center">
               <div className="w-[64px] h-[64px] mx-auto rounded-full bg-[#f1e8ff] flex items-center justify-center text-[#4a2d7a] text-[24px] font-bold mb-5 shadow-sm">{f.icon}</div>
@@ -63,12 +62,12 @@ export default function LandingPage() {
         <h2 className="font-['Poppins'] font-bold text-[30px] text-[#4a2d7a] text-center mb-12">Our Services</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 max-w-[1200px] mx-auto">
           {[
-   {icon:'⚡', title:'Same-Day Delivery', desc:'Quickly place a delivery request by entering pickup and destination details through our simple, intuitive platform.'},
-  {icon:'📦', title:'Business Parcel Delivery', desc:'Reliable parcel solutions designed to support business operations with consistent pickups and timely deliveries.'},
-  {icon:'📍', title:'Real-Time Tracking', desc:'Track your parcel live with accurate updates from pickup through every stage of delivery.'},
-  {icon:'🔒', title:'Secure Package Handling', desc:'Packages are handled carefully using secure procedures to ensure safety, protection, and damage-free delivery.'},
-].map((s,i)=>(
-          <div key={i} className="text-center">
+            {icon:'⚡', title:'Same-Day Delivery', desc:'Quickly place a delivery request by entering pickup and destination details through our simple, intuitive platform.'},
+            {icon:'📦', title:'Business Parcel Delivery', desc:'Reliable parcel solutions designed to support business operations with consistent pickups and timely deliveries.'},
+            {icon:'📍', title:'Real-Time Tracking', desc:'Track your parcel live with accurate updates from pickup through every stage of delivery.'},
+            {icon:'🔒', title:'Secure Package Handling', desc:'Packages are handled carefully using secure procedures to ensure safety, protection, and damage-free delivery.'},
+          ].map((s,i)=>(
+            <div key={i} className="text-center">
               <div className="w-[64px] h-[64px] mx-auto rounded-full bg-[#f1e8ff] flex items-center justify-center text-[#4a2d7a] text-[24px] font-bold mb-5 shadow-sm">{s.icon}</div>
               <h4 className="font-['Poppins'] font-bold text-[16px] text-[#2d1654] mb-3">{s.title}</h4>
               <p className="text-[14px] text-[#5a4a78] leading-[1.6]">{s.desc}</p>
@@ -77,7 +76,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* TRACK - #FAF7FF */}
+      {/* TRACK */}
       <section id="track" className="py-16 px-6 bg-[#FAF7FF] border-y border-[#ede6ff]">
         <h2 className="font-['Poppins'] font-bold text-[28px] text-[#4a2d7a] text-center">Track Your Parcel</h2>
         <p className="text-center text-[14px] text-[#6b5a8a] mt-3 mb-8">Enter your tracking code below to see current status and location.</p>
@@ -88,7 +87,7 @@ export default function LandingPage() {
         <p className="text-center text-[13px] text-[#8a7bb5] mt-4">Example: <span className="text-[#2d1654] font-bold">DU123456789</span></p>
       </section>
 
-      {/* APP DOWNLOAD - FIXED ICONS */}
+      {/* APP DOWNLOAD */}
       <section className="bg-[#3d1560] py-20 px-6 text-center">
         <h2 className="font-['Poppins'] font-bold text-white text-[28px] mb-10">Get the Deliver Uganda App</h2>
         <div className="flex justify-center gap-5 flex-wrap">
@@ -107,13 +106,16 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <footer className="bg-[#f3f0f7] px-6 py-5 flex flex-col md:flex-row justify-between items-center text-[13px]">
+      {/* FOOTER - CLEAN CENTERED */}
+      <footer className="bg-[#f3f0f7] px-6 py-5 grid grid-cols-1 md:grid-cols-3 items-center text-[13px]">
         <div>
           <div className="font-['Poppins'] font-extrabold text-[#2d1654] text-[15px]">DELIVER UGANDA</div>
           <div className="text-[#8a7bb5] mt-1">© 2025 Deliver Uganda. All rights reserved</div>
         </div>
-        <div className="font-semibold text-[#2d1654] mt-2 md:mt-0 text-[13px]">Terms and Conditions</div>
-        <img src={liveChat} alt="live chat" className="h-[32px] mt-2 md:mt-0 cursor-pointer" />
+        <div className="font-semibold text-[#2d1654] text-center mt-2 md:mt-0">
+          Terms and Conditions
+        </div>
+        <div className="hidden md:block"></div>
       </footer>
     </div>
   )
