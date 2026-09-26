@@ -3,3 +3,5 @@
 /backend/vendor
 /backend/node_modules
 .env
+/composer.json
+/composer.lock
