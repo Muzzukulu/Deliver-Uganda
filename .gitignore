@@ -1,0 +1,5 @@
+/vendor
+/node_modules
+/backend/vendor
+/backend/node_modules
+.env
