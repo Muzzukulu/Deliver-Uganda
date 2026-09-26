@@ -23,11 +23,9 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/register" element={<Register />} />
         <Route path="/driver/register" element={<Register />} />
-		// inside Routes
-		<Route path="/admin" element={<AdminChat />} />
+        <Route path="/admin" element={<AdminChat />} />
       </Routes>
       <LiveChat />
     </BrowserRouter>
   );
 }
-
