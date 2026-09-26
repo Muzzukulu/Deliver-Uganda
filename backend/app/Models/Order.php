@@ -29,5 +29,30 @@ class Order extends Model
     'commission_rate',
     'status',
     'payment_status',
+    'parcel_tracker_number', // <-- ADDED
   ];
+
+  protected static function boot()
+  {
+      parent::boot();
+
+      static::creating(function ($order) {
+          // Don't overwrite if already set manually
+          if (empty($order->parcel_tracker_number)) {
+              
+              // Get last number from DB for safety
+              $lastOrder = self::orderBy('id', 'desc')->first();
+              
+              if ($lastOrder && preg_match('/DUG-(\d+)/', $lastOrder->parcel_tracker_number, $matches)) {
+                  $lastNumber = intval($matches[1]);
+              } else {
+                  $lastNumber = self::count();
+              }
+
+              $nextNumber = $lastNumber + 1;
+              $order->parcel_tracker_number = 'DUG-' . str_pad($nextNumber, 7, '0', STR_PAD_LEFT);
+              // Result: DUG-0000001, DUG-0000002...
+          }
+      });
+  }
 }

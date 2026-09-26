@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Order;
 
 class OrderController extends Controller
@@ -21,7 +22,12 @@ class OrderController extends Controller
     $driverCommissionUgx = round($driverCommissionUsd * $usdToUgx);
     $platformFeeUgx = round($platformProfitUsd * $usdToUgx);
 
+    // AUTO-GENERATOR FOR PTN - NO MORE TINKER!
+    $lastId = Order::max('id') + 1;
+    $ptn = 'DUG-' . str_pad($lastId, 7, '0', STR_PAD_LEFT);
+
     $order = Order::create([
+      'parcel_tracker_number' => $ptn,
       'client_id' => $request->client_id,
       'driver_id' => $request->driver_id,
       'pickup_address' => $request->pickup_address ?? $request->pickup ?? 'Nakawa',
@@ -61,8 +67,22 @@ class OrderController extends Controller
     $o->update($request->all()); 
     return $o; 
   }
+  
   public function destroy($id) { 
     Order::findOrFail($id)->delete(); 
     return response()->json(['message'=>'Deleted']); 
+  }
+
+  // PUBLIC TRACKING PAGE - NO LOGIN NEEDED
+  public function track($ptn) {
+    $order = Order::where('parcel_tracker_number', $ptn)->firstOrFail();
+    return view('track', compact('order'));
+  }
+
+  // PDF RECEIPT DOWNLOAD
+  public function receipt($ptn) {
+    $order = Order::where('parcel_tracker_number', $ptn)->firstOrFail();
+    $pdf = Pdf::loadView('receipt', compact('order'));
+    return $pdf->download("Receipt-{$ptn}.pdf");
   }
 }
