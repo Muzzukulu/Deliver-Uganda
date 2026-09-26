@@ -9,6 +9,9 @@ export default function LandingPage() {
   const [lastScroll, setLastScroll] = useState(0);
   const [showChat, setShowChat] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [trackCode, setTrackCode] = useState("");
+  const [trackResult, setTrackResult] = useState(null);
+  const [trackError, setTrackError] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +23,28 @@ export default function LandingPage() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScroll]);
+
+  const handleTrack = () => {
+    setTrackError("");
+    setTrackResult(null);
+    const code = trackCode.trim().toUpperCase();
+    if (!code) {
+      setTrackError("Please enter tracking code, e.g. DU123456789");
+      return;
+    }
+    // TEMP DEMO LOGIC - Replace with API call later: fetch(`/api/parcels/${code}`)
+    if (code.startsWith("DU")) {
+      setTrackResult({
+        code: code,
+        status: "In Transit",
+        from: "Kampala Hub",
+        to: "Mbarara",
+        update: "Left Kampala Hub - Arriving today 4:00 PM",
+      });
+    } else {
+      setTrackError(`No parcel found with code ${code}. Try DU123456789 for demo.`);
+    }
+  };
 
   return (
     <div className="w-full bg-[#faf7ff] font-['Poppins'] overflow-x-hidden">
@@ -77,9 +102,37 @@ export default function LandingPage() {
         <h2 className="font-bold text-[24px] text-center text-[#3C1F6B]">Track Your Parcel</h2>
         <p className="text-center text-[13px] text-gray-500 mt-2">Enter your tracking code below to see current status and location.</p>
         <div className="max-w-[680px] mx-auto flex gap-3 mt-8">
-          <input placeholder="Enter Tracking Code, e.g. DU123456789" className="flex-1 h-[48px] px-5 rounded-xl bg-white border-2 border-[#e9d5ff] text-[13px] outline-none" />
-          <button className="bg-[#3d1560] text-white px-8 h-[48px] rounded-xl font-bold text-[14px]">Track</button>
+          <input
+            value={trackCode}
+            onChange={(e)=>setTrackCode(e.target.value)}
+            onKeyDown={(e)=> e.key==='Enter' && handleTrack()}
+            placeholder="Enter Tracking Code, e.g. DU123456789"
+            className="flex-1 h-[48px] px-5 rounded-xl bg-white border-2 border-[#e9d5ff] text-[13px] outline-none focus:border-[#3d1560]"
+          />
+          <button onClick={handleTrack} className="bg-[#3d1560] text-white px-8 h-[48px] rounded-xl font-bold text-[14px] hover:bg-[#2d0f47]">Track</button>
         </div>
+
+        {/* RESULT AREA - This is where it LEADS */}
+        {trackError && (
+          <div className="max-w-[680px] mx-auto mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-[13px] text-center">
+            {trackError}
+          </div>
+        )}
+        {trackResult && (
+          <div className="max-w-[680px] mx-auto mt-6 bg-white border-2 border-[#e9d5ff] rounded-2xl p-6 shadow-sm">
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold text-[#3C1F6B] text-[15px]">{trackResult.code}</h3>
+              <span className="bg-green-100 text-green-700 text-[11px] font-bold px-3 py-1 rounded-full">{trackResult.status}</span>
+            </div>
+            <div className="mt-4 flex items-center gap-2 text-[13px] text-gray-600">
+              <span>{trackResult.from}</span><span>→</span><span className="font-bold text-[#3C1F6B]">{trackResult.to}</span>
+            </div>
+            <p className="mt-3 text-[12px] text-gray-500">{trackResult.update}</p>
+            <div className="mt-4 h-[4px] w-full bg-gray-100 rounded-full overflow-hidden">
+              <div className="h-full w-[70%] bg-[#3d1560] rounded-full"></div>
+            </div>
+          </div>
+        )}
       </section>
 
       <section className="py-10 px-6 bg-[#3d1560]">
@@ -88,15 +141,17 @@ export default function LandingPage() {
           <div className="bg-black text-white flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20">
             <span className="text-[22px]">▶</span><div className="leading-none text-left"><div className="text-[9px] uppercase">GET IT ON</div><div className="text-[13px] font-bold">Google Play</div></div></div>
           <div className="bg-black text-white flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/20">
-            <span className="text-[20px]"></span><div className="leading-none text-left"><div className="text-[9px]">Download on the</div><div className="text-[13px] font-bold">App Store</div></div></div>
+            <svg viewBox="0 0 384 512" className="w-[18px] h-[22px] fill-white shrink-0">
+              <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-159.6-26.2-12.8-26.2-62.9 0-75.7zM248.8 90.3c23-27.2 31.8-62.4 30.4-94.8-30.4 2.8-66.3 21.2-86.8 47.8-17.8 22.2-28.8 53.8-23.8 84.8 31.8 2.8 64.8-18.2 80.2-37.8z"/>
+            </svg>
+            <div className="leading-none text-left"><div className="text-[9px]">Download on the</div><div className="text-[13px] font-bold">App Store</div></div></div>
         </div>
       </section>
 
-      <footer className="bg-[#f3f0f7] px-6 py-5 flex justify-between items-center text-[13px]">
+      <footer className="bg-[#f3f0f7] px-6 py-5 flex items-center text-[13px] relative">
         <div className="font-extrabold text-[#3C1F6B]">DELIVER UGANDA<p className="font-normal text-[11px]">© 2025 Deliver Uganda. All rights reserved</p></div>
-        <div className="font-medium text-[#3C1F6B] cursor-pointer">Terms and Conditions</div>
+        <div className="font-medium text-[#3C1F6B] cursor-pointer absolute left-1/2 -translate-x-1/2 text-center">Terms and Conditions</div>
       </footer>
-
       <div className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#3c0f6e] text-white text-2xl flex items-center justify-center shadow-lg z-50">
         {showChat? <span onClick={()=>setShowChat(false)} className="cursor-pointer">✕</span> : <span onClick={()=>setShowChat(true)} className="cursor-pointer">🎧</span>}
       </div>
