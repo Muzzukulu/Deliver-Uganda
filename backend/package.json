@@ -17,6 +17,7 @@
         "@laravel/multiplex": "^0.4.1"
     },
     "dependencies": {
+        "bootstrap": "^5.3.8",
         "multer": "^2.2.0"
     }
 }

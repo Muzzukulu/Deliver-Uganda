@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import truckImg from '../images/truck.jpg'
 import logo from '../images/logo.png'
 

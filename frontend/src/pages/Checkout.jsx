@@ -4,11 +4,12 @@ import { useSearchParams, Link } from "react-router-dom";
 export default function Checkout() {
   const [searchParams] = useSearchParams();
   const pkgName = searchParams.get("package") || "pro";
+  const RATE = 3850;
 
   const packages = {
-    basic: { name: "Basic", price: 110000, deliveries: 20 },
-    pro: { name: "Pro", price: 250000, deliveries: 50 },
-    enterprise: { name: "Enterprise", price: 450000, deliveries: 100 },
+    basic: { name: "Basic", price: 110000, deliveries: 20, usd: 28.57 },
+    pro: { name: "Pro", price: 250000, deliveries: 50, usd: 64.94 },
+    enterprise: { name: "Enterprise", price: 450000, deliveries: 100, usd: 116.88 },
   };
 
   const selected = packages[pkgName] || packages.pro;
@@ -31,7 +32,7 @@ export default function Checkout() {
         <div style={{background:"white", padding:"40px", borderRadius:"24px", textAlign:"center", maxWidth:"400px", boxShadow:"0 20px 60px rgba(0,0,0,0.08)"}}>
           <div style={{fontSize:"60px"}}>✅</div>
           <h2 style={{fontFamily:"'Outfit', sans-serif", fontSize:"28px", color:"#1e1b4b"}}>Payment Request Sent!</h2>
-          <p style={{color:"#64748b"}}>Check your phone <b>{phone}</b> and enter PIN to pay <b>{selected.price.toLocaleString()} UGX</b> for {selected.name}</p>
+          <p style={{color:"#64748b"}}>Check your phone <b>{phone}</b> and enter PIN to pay <b>${selected.usd} USD ({selected.price.toLocaleString()} UGX)</b> for {selected.name}</p>
           <Link to="/dashboard" style={{display:"inline-block", marginTop:"20px", background:"#7c3aed", color:"white", padding:"12px 24px", borderRadius:"12px", textDecoration:"none", fontWeight:700}}>Go to Dashboard</Link>
         </div>
       </div>
@@ -45,15 +46,16 @@ export default function Checkout() {
         <h1 style={{fontFamily:"'Outfit', sans-serif", fontSize:"26px", margin:"16px 0 6px", color:"#1e1b4b"}}>Checkout</h1>
         <div style={{background:"#f5f3ff", borderRadius:"14px", padding:"16px", marginBottom:"20px", border:"1px solid #ede9fe"}}>
           <div style={{display:"flex", justifyContent:"space-between"}}><span style={{color:"#64748b"}}>Package</span><b style={{color:"#1e1b4b"}}>{selected.name} - {selected.deliveries} deliveries</b></div>
-          <div style={{display:"flex", justifyContent:"space-between", marginTop:"8px", fontSize:"18px"}}><span>Total</span><b style={{color:"#7c3aed"}}>{selected.price.toLocaleString()} UGX</b></div>
+          <div style={{display:"flex", justifyContent:"space-between", marginTop:"8px", fontSize:"18px"}}><span>Total</span><b style={{color:"#7c3aed"}}>${selected.usd} USD</b></div>
+          <div style={{fontSize:"12px", color:"#64748b", textAlign:"right"}}>{selected.price.toLocaleString()} UGX @ {RATE}</div>
           <div style={{fontSize:"12px", color:"#16a34a", marginTop:"6px", fontWeight:700}}>You save ~{(selected.deliveries * 1500).toLocaleString()} UGX</div>
         </div>
         <label style={{fontSize:"13px", fontWeight:700, color:"#334155"}}>MTN / Airtel Number</label>
         <input value={phone} onChange={e=>setPhone(e.target.value)} placeholder="0772 123 456" style={{width:"100%", padding:"14px", borderRadius:"12px", border:"1px solid #cbd5e1", margin:"8px 0 18px", fontSize:"16px", boxSizing:"border-box"}}/>
         <button onClick={handlePay} disabled={loading} style={{width:"100%", padding:"15px", borderRadius:"12px", border:"none", background: loading? "#a78bfa" : "#7c3aed", color:"white", fontWeight:800, fontSize:"16px", cursor:"pointer"}}>
-          {loading? "Sending MoMo Prompt..." : `Pay ${selected.price.toLocaleString()} UGX`}
+          {loading? "Sending MoMo Prompt..." : `Pay $${selected.usd} USD`}
         </button>
-        <div style={{textAlign:"center", marginTop:"14px", fontSize:"12px", color:"#94a3b8"}}>Secured by MTN MoMo • Cluster Delivery UG</div>
+        <div style={{textAlign:"center", marginTop:"14px", fontSize:"12px", color:"#94a3b8"}}>Secured by MTN MoMo • Rate ${RATE} • Cluster Delivery UG</div>
       </div>
     </div>
   );

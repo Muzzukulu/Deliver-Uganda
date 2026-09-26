@@ -9,7 +9,7 @@ return new class extends Migration {
             $table->id();
             
             // Who ordered?
-            $table->foreignId('client_id')->constrained('clients')->onDelete('cascade');
+            $table->foreignId('client_id')->nullable()->constrained('clients')->onDelete('cascade');
             
             // Which driver? (nullable at first)
             $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('set null');
@@ -23,6 +23,13 @@ return new class extends Migration {
             $table->decimal('dropoff_lng', 10, 7);
 
             $table->string('package_description');
+            
+            // PRICE ENGINE - USD is source of truth
+            $table->decimal('price_usd', 10, 2)->default(6.50); // ENGINE - stable
+            $table->integer('price_ugx')->default(25000); // DISPLAY - calculated
+            $table->integer('rate_used')->default(3850); // rate at time of order
+            
+            // Keep old price for backward compat
             $table->decimal('price', 10, 2)->nullable();
 
             $table->enum('status', ['pending', 'accepted', 'picked', 'on_the_way', 'delivered', 'cancelled'])->default('pending');
