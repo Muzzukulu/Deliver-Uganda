@@ -1,46 +1,45 @@
-import { useState } from 'react';
-
+// src/components/LiveChatEntrance.jsx - POLISHED NO-SCROLL
 export default function LiveChatEntrance({ onSelectRiders, onSelectManagement }) {
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border-t-4 border-purple-600">
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-bold text-[#0f172a]">Welcome to Deliver Uganda</h2>
-        <p className="text-sm text-gray-500 mt-2">Who would you like to contact?</p>
+    <div className="bg-white rounded-2xl shadow-2xl p-4 w-full max-w-[360px] border-t-[3px] border-purple-600">
+      <div className="text-center mb-3.5">
+        <h2 className="text-[15px] font-bold text-[#0f172a] leading-tight">Welcome to Deliver Uganda</h2>
+        <p className="text-[11px] text-gray-500 mt-1 leading-snug">Who would you like to contact?</p>
       </div>
 
-      <div className="space-y-4">
-        {/* RIDER NETWORK */}
+      <div className="space-y-2.5">
+        {/* RIDER NETWORK - LIGHT GREY HOVER */}
         <button
           onClick={onSelectRiders}
-          className="w-full text-left p-4 rounded-xl border-2 border-purple-600 bg-purple-50 hover:bg-purple-600 group transition-all"
+          className="w-full text-left p-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-100 transition-colors"
         >
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">🛵</span>
-            <div>
-              <h3 className="font-bold text-[#0f172a] group-hover:text-white">Our Rider Network</h3>
-              <p className="text-xs text-gray-600 group-hover:text-purple-100 mt-1 leading-relaxed">
+          <div className="flex items-start gap-2.5">
+            <span className="text-[18px] leading-none">🛵</span>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-[13px] text-[#0f172a] leading-tight">Our Rider Network</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5 leading-[1.35]">
                 I need to send a parcel. Connect me to available riders within my 5km area.
               </p>
-              <span className="inline-block mt-2 text-[10px] bg-white text-purple-700 px-2 py-1 rounded-full font-semibold group-hover:bg-[#0f172a] group-hover:text-white">
+              <span className="inline-block mt-1.5 text-[9px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full font-medium">
                 Voice + Text • Fastest
               </span>
             </div>
           </div>
         </button>
 
-        {/* MANAGEMENT */}
+        {/* MANAGEMENT - LIGHT PURPLE/GREY HOVER */}
         <button
           onClick={onSelectManagement}
-          className="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-[#0f172a] group transition-all"
+          className="w-full text-left p-3 rounded-xl border border-gray-200 bg-white hover:bg-[#f3f0ff] transition-colors"
         >
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">🏢</span>
-            <div>
-              <h3 className="font-bold text-[#0f172a] group-hover:text-white">Management & Support</h3>
-              <p className="text-xs text-gray-500 group-hover:text-slate-300 mt-1 leading-relaxed">
+          <div className="flex items-start gap-2.5">
+            <span className="text-[18px] leading-none">🏢</span>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-[13px] text-[#0f172a] leading-tight">Management & Support</h3>
+              <p className="text-[11px] text-gray-500 mt-0.5 leading-[1.35]">
                 For general inquiries, partnerships, or support.
               </p>
-              <span className="inline-block mt-2 text-[10px] bg-slate-100 text-slate-600 px-2 py-1 rounded-full font-semibold group-hover:bg-white group-hover:text-[#0f172a]">
+              <span className="inline-block mt-1.5 text-[9px] bg-[#f3f0ff] text-[#6d5bd0] px-2 py-0.5 rounded-full font-medium">
                 Text Only
               </span>
             </div>
@@ -48,7 +47,7 @@ export default function LiveChatEntrance({ onSelectRiders, onSelectManagement })
         </button>
       </div>
 
-      <p className="text-[10px] text-center text-gray-400 mt-5">
+      <p className="text-[9px] text-center text-gray-400 mt-3 leading-none">
         Tip: Only registered clients can send voice notes to riders.
       </p>
     </div>
