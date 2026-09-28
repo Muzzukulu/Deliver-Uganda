@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import CreateDriverAccount from './CreateDriver.jsx'
+import CreateRiderAccount from './CreateRider.jsx'
 
 const API = 'http://127.0.0.1:8000/api'
 
@@ -52,8 +52,8 @@ export default function App() {
         <p style={{fontSize:12, opacity:0.6, marginBottom:20}}>ADMIN PANEL v1.0</p>
         {[
           ['orders','📦 Orders'],
-          ['drivers','🏍️ Drivers'],
-          ['create-driver','✨ Create Driver'], // <-- NEW BUTTON
+          ['riders','🏍️ riders'],
+          ['create-rider','✨ Create Rider'], // <-- NEW BUTTON
           ['map','🗺️ Live Map'],
           ['finance','💰 Finance']
         ].map(([k,l])=>(
@@ -75,9 +75,9 @@ export default function App() {
         </div>
       </aside>
       <main style={{flex:1, padding:24}}>
-        {activeTab==='create-driver' && <CreateDriverAccount />}
+        {activeTab==='create-rider' && <CreateRiderAccount />}
         
-        {activeTab!=='create-driver' && (
+        {activeTab!=='create-rider' && (
           <>
             <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:16, marginBottom:24}}>
               <div style={{background:'white', padding:20, borderRadius:12}}><div style={{opacity:0.6}}>Total Orders</div><div style={{fontSize:32, fontWeight:800}}>{stats.total}</div></div>
@@ -106,7 +106,7 @@ export default function App() {
                 </table>
               </div>
             )}
-            {activeTab==='drivers' && <div style={{padding:40, textAlign:'center', background:'white', borderRadius:12}}>Drivers list coming soon... Use ✨ Create Driver tab</div>}
+            {activeTab==='riders' && <div style={{padding:40, textAlign:'center', background:'white', borderRadius:12}}>riders list coming soon... Use ✨ Create Rider tab</div>}
             {activeTab==='map' && <div style={{padding:40, textAlign:'center', background:'white', borderRadius:12}}>Live Map coming...</div>}
             {activeTab==='finance' && <div style={{padding:40, textAlign:'center', background:'white', borderRadius:12}}>Finance dashboard...</div>}
           </>

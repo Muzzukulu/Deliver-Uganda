@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 
 export default function AdminDashboard() {
   const [orders, setOrders] = useState([
-    {id: "D-1024", driver: "Musa B.", route: "Nansana → Mukono", status: "In Transit", price_usd: 6.5},
-    {id: "D-1025", driver: "John K.", route: "Ntinda → Kololo", status: "Delivered", price_usd: 4.7},
-    {id: "D-1026", driver: "Sarah N.", route: "Wandegeya → Bugolobi", status: "Accepted", price_usd: 8.3},
+    {id: "D-1024", Rider: "Musa B.", route: "Nansana → Mukono", status: "In Transit", price_usd: 6.5},
+    {id: "D-1025", Rider: "John K.", route: "Ntinda → Kololo", status: "Delivered", price_usd: 4.7},
+    {id: "D-1026", Rider: "Sarah N.", route: "Wandegeya → Bugolobi", status: "Accepted", price_usd: 8.3},
   ]);
   const [rate, setRate] = useState(3850);
   const [editingRate, setEditingRate] = useState(false);
@@ -31,7 +31,7 @@ export default function AdminDashboard() {
             const usd = d.price_usd || d.price_usd === 0? Number(d.price_usd) : (d.price? Number(d.price)/rate : 6.5);
             return {
               id: d.id,
-              driver: d.rider_name || "Musa B.",
+              Rider: d.rider_name || "Musa B.",
               route: `${d.pickup || d.from || 'Entebbe'} → ${d.dropoff || d.to || 'Kampala'}`,
               status: d.status || "Accepted",
               price_usd: usd,
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
             const usd = o.price_usd? Number(o.price_usd) : (o.price? Number(o.price)/3850 : 6.5);
             return {
               id: o.id,
-              driver: o.rider_name||"John K.",
+              Rider: o.rider_name||"John K.",
               route: `${o.pickup} → ${o.dropoff}`,
               status: o.status||"Accepted",
               price_usd: usd,
@@ -72,7 +72,7 @@ export default function AdminDashboard() {
         <h1 className="text-xl font-bold text-[#A78BFA]">Deliver.ug Admin</h1>
         <nav className="mt-10 space-y-2 text-sm text-gray-400">
           <p className="bg-[#5B1E9A] text-white px-4 py-2.5 rounded-xl">📊 Dashboard</p>
-          <p className="px-4 py-2.5">👥 Drivers</p><p className="px-4 py-2.5">📦 Orders</p><p className="px-4 py-2.5">💰 Finance</p>
+          <p className="px-4 py-2.5">👥 riders</p><p className="px-4 py-2.5">📦 Orders</p><p className="px-4 py-2.5">💰 Finance</p>
         </nav>
         <div className="mt-10 bg-black/30 p-4 rounded-xl border border-white/10">
           <p className="text-xs text-gray-400">USD → UGX Rate</p>
@@ -105,21 +105,21 @@ export default function AdminDashboard() {
             <p className="text-xs text-green-400 mt-1">Rate: {rate}</p>
           </div>
           <div className="bg-[#1A1033] p-5 rounded-2xl border border-white/10"><p className="text-xs text-gray-400">Active Orders</p><p className="text-2xl font-bold mt-1">{orders.length}</p></div>
-          <div className="bg-[#1A1033] p-5 rounded-2xl border border-white/10"><p className="text-xs text-gray-400">Drivers Online</p><p className="text-2xl font-bold mt-1">43</p></div>
+          <div className="bg-[#1A1033] p-5 rounded-2xl border border-white/10"><p className="text-xs text-gray-400">riders Online</p><p className="text-2xl font-bold mt-1">43</p></div>
           <div className="bg-[#1A1033] p-5 rounded-2xl border border-white/10"><p className="text-xs text-gray-400">Avg Order</p><p className="text-2xl font-bold mt-1">{Math.round((totalUSD/orders.length||0)*rate).toLocaleString()} UGX</p><p className="text-xs text-[#A78BFA]">${(totalUSD/orders.length||0).toFixed(2)} USD</p></div>
         </div>
 
         <div className="bg-[#1A1033] rounded-2xl border border-white/10 overflow-hidden">
           <div className="p-5 flex justify-between"><h3 className="font-bold">Live Deliveries — Client sees UGX, Engine is USD</h3><button className="text-xs bg-[#5B1E9A] px-3 py-1.5 rounded-full">View All</button></div>
           <table className="w-full text-sm text-left text-gray-400">
-            <thead className="bg-black/20 text-xs"><tr><th className="p-4">Order ID</th><th>Driver</th><th>Route</th><th>Client (UGX)</th><th>Engine (USD)</th><th>Status</th></tr></thead>
+            <thead className="bg-black/20 text-xs"><tr><th className="p-4">Order ID</th><th>Rider</th><th>Route</th><th>Client (UGX)</th><th>Engine (USD)</th><th>Status</th></tr></thead>
             <tbody>
               {orders.map(o=>{
                 const usd = o.price_usd || 0;
                 const ugx = o.price_ugx || Math.round(usd * rate);
                 return (
                 <tr key={o.id} className="border-t border-white/5">
-                  <td className="p-4">#{o.id}</td><td>{o.driver}</td><td>{o.route}</td>
+                  <td className="p-4">#{o.id}</td><td>{o.Rider}</td><td>{o.route}</td>
                   <td className="font-bold text-white">{ugx.toLocaleString()} UGX</td>
                   <td className="text-[#A78BFA]">${usd.toFixed(2)}</td>
                   <td className={o.status==="Delivered"?"text-green-400":o.status==="In Transit"?"text-yellow-400":"text-blue-400"}>{o.status}</td>

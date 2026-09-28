@@ -4,7 +4,7 @@ import Card from './components/ui/Card'
 import Button from './components/ui/Button'
 import { THEME } from './theme'
 
-export default function CreateDriver() {
+export default function CreateRider() {
   const [form, setForm] = useState({
     firstName:'', lastName:'', phone:'', nin:'', vehicle:'Boda Boda', plate:''
   })
@@ -15,13 +15,13 @@ export default function CreateDriver() {
   const submit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    // TODO: connect to backend: /api/drivers
-    setTimeout(()=>{ alert('Driver Created!'); setLoading(false) }, 1000)
+    // TODO: connect to backend: /api/riders
+    setTimeout(()=>{ alert('Rider Created!'); setLoading(false) }, 1000)
   }
 
   return (
     <div style={{minHeight:'100vh', background:THEME.colors.bgPage, display:'flex', alignItems:'center', justifyContent:'center', padding:'24px'}}>
-      <Card style={{maxWidth:'520px', width:'100%'}} title="Create Driver" subtitle="Register a new delivery partner">
+      <Card style={{maxWidth:'520px', width:'100%'}} title="Create Rider" subtitle="Register a new delivery partner">
         
         <form onSubmit={submit} style={{display:'flex', flexDirection:'column', gap:'16px', marginTop:'24px'}}>
           
@@ -49,7 +49,7 @@ export default function CreateDriver() {
         </form>
 
         <p style={{textAlign:'center', color:THEME.colors.textMuted, fontSize:'13px', marginTop:'16px'}}>
-          Driver will receive SMS to set password
+          Rider will receive SMS to set password
         </p>
       </Card>
     </div>
