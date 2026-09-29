@@ -15,11 +15,11 @@ class OrderController extends Controller
     $commissionRate = 70;
     $baseFeeUsd = $request->delivery_fee_usd ?? $request->price_usd ?? 6.50;
     
-    $driverCommissionUsd = round($baseFeeUsd * ($commissionRate / 100), 2);
-    $platformProfitUsd = round($baseFeeUsd - $driverCommissionUsd, 2);
+    $transporterCommissionUsd = round($baseFeeUsd * ($commissionRate / 100), 2);
+    $platformProfitUsd = round($baseFeeUsd - $transporterCommissionUsd, 2);
     
     $baseFeeUgx = round($baseFeeUsd * $usdToUgx);
-    $driverCommissionUgx = round($driverCommissionUsd * $usdToUgx);
+    $transporterCommissionUgx = round($transporterCommissionUsd * $usdToUgx);
     $platformFeeUgx = round($platformProfitUsd * $usdToUgx);
 
     // AUTO-GENERATOR FOR PTN - NO MORE TINKER!
@@ -29,7 +29,7 @@ class OrderController extends Controller
     $order = Order::create([
       'parcel_tracker_number' => $ptn,
       'client_id' => $request->client_id,
-      'driver_id' => $request->driver_id,
+      'transporter_id' => $request->transporter_id,
       'pickup_address' => $request->pickup_address ?? $request->pickup ?? 'Nakawa',
       'pickup_lat' => $request->pickup_lat ?? 0.3476,
       'pickup_lng' => $request->pickup_lng ?? 32.5825,
@@ -40,7 +40,7 @@ class OrderController extends Controller
       
       'price' => $baseFeeUgx,
       'delivery_fee' => $baseFeeUgx,
-      'rider_payout' => $driverCommissionUgx,
+      'transporter_payout' => $transporterCommissionUgx,
       'platform_fee' => $platformFeeUgx,
       
       'price_usd' => $baseFeeUsd,
@@ -49,7 +49,7 @@ class OrderController extends Controller
       'exchange_rate' => $usdToUgx,
       'distance_km' => $request->distance_km ?? 5.2,
       'delivery_fee_usd' => $baseFeeUsd,
-      'driver_commission_usd' => $driverCommissionUsd,
+      'transporter_commission_usd' => $transporterCommissionUsd,
       'platform_profit_usd' => $platformProfitUsd,
       'commission_rate' => $commissionRate,
       'status' => 'pending',

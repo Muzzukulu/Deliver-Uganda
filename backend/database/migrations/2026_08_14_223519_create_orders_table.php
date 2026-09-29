@@ -9,10 +9,10 @@ return new class extends Migration {
             $table->id();
             
             // Who ordered?
-            $table->foreignId('client_id')->nullable()->constrained('clients')->onDelete('cascade');
+            $table->foreignId('client_id')->nullable()->constrained('users')->onDelete('cascade');
             
-            // Which driver? (nullable at first)
-            $table->foreignId('driver_id')->nullable()->constrained('drivers')->onDelete('set null');
+            // Which transporter? (nullable at first)
+            $table->foreignId('transporter_id')->nullable()->constrained('transporters')->onDelete('set null');
 
             $table->string('pickup_address');
             $table->decimal('pickup_lat', 10, 7);
@@ -25,12 +25,27 @@ return new class extends Migration {
             $table->string('package_description');
             
             // PRICE ENGINE - USD is source of truth
-            $table->decimal('price_usd', 10, 2)->default(6.50); // ENGINE - stable
-            $table->integer('price_ugx')->default(25000); // DISPLAY - calculated
-            $table->integer('rate_used')->default(3850); // rate at time of order
+            $table->decimal('price_usd', 10, 2)->default(6.50);
+            $table->decimal('price_ugx', 10, 2)->default(25000);
+            $table->integer('rate_used')->default(3850);
+            $table->decimal('exchange_rate', 10, 2)->default(3850);
             
             // Keep old price for backward compat
             $table->decimal('price', 10, 2)->nullable();
+
+            // DISTANCE & FEES - NEW TRANSPORTER ENGINE
+            $table->decimal('distance_km', 10, 2)->nullable();
+            $table->decimal('delivery_fee', 10, 2)->nullable();
+            $table->decimal('delivery_fee_usd', 10, 2)->nullable();
+            $table->decimal('transporter_payout', 10, 2)->nullable();
+            $table->decimal('transporter_commission_usd', 10, 2)->nullable();
+            $table->decimal('platform_fee', 10, 2)->nullable();
+            $table->decimal('platform_profit_usd', 10, 2)->nullable();
+            $table->decimal('commission_rate', 5, 2)->default(20.00);
+
+            // TRACKING & PAYMENT
+            $table->string('parcel_tracker_number')->unique()->nullable();
+            $table->enum('payment_status', ['pending', 'paid', 'failed'])->default('pending');
 
             $table->enum('status', ['pending', 'accepted', 'picked', 'on_the_way', 'delivered', 'cancelled'])->default('pending');
             

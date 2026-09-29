@@ -1,2 +1,4 @@
 *
+!drivers/
+!drivers/.gitignore
 !.gitignore

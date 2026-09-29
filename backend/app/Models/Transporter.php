@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Driver extends Authenticatable
+class Transporter extends Authenticatable
 {
     use HasApiTokens, HasFactory;
 

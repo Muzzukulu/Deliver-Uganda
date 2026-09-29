@@ -30,23 +30,23 @@ class OrderController extends Controller
       'exchange_rate' => $request->exchange_rate,
       'distance_km' => $request->distance_km,
       'delivery_fee' => $request->delivery_fee,
-      'rider_payout' => $request->rider_payout,
+      'transporter_payout' => $request->transporter_payout,
       'platform_fee' => $request->platform_fee,
     ]);
     return response()->json($order, 201);
   }
 
-  // NEW - Rider accepts order
+  // Transporter accepts order
   public function accept(Request $request, $id) {
       $order = Order::findOrFail($id);
       $order->update([
           'status' => 'accepted',
-          'rider_id' => $request->user()->id ?? $request->rider_id,
+          'transporter_id' => $request->user()->id ?? $request->transporter_id,
       ]);
-      return response()->json(['message' => 'Order accepted by rider', 'order' => $order]);
+      return response()->json(['message' => 'Order accepted by transporter', 'order' => $order]);
   }
 
-  // NEW - Rider marks delivered
+  // Transporter marks delivered
   public function markDelivered(Request $request, $id) {
       $order = Order::findOrFail($id);
       $order->update(['status' => 'delivered']);

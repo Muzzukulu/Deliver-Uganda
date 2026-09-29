@@ -1,7 +1,32 @@
+# Dependencies
 /vendor
 /node_modules
 /backend/vendor
 /backend/node_modules
+/admin-app/node_modules
+/transport-app/node_modules
+/landing-app/node_modules
+
+# Secrets - MOST IMPORTANT
 .env
+/.env
+/backend/.env
+/backend/.env.backup
+
+# Laravel Storage - Protect NIN Photos
+/backend/public/storage
+/backend/storage/logs/*
+/backend/storage/framework/cache/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*
+/backend/storage/app/public/drivers/*
+!/backend/storage/app/public/drivers/.gitignore
+
+# IDE
+/.idea
+/.vscode
+/.fleet
 /composer.json
 /composer.lock
+composer.json
+composer.lock

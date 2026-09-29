@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\rider;
+use App\Models\Transporter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class RiderController extends Controller
+class TransporterController extends Controller
 {
     public function register(Request $request)
     {
@@ -15,9 +15,9 @@ class RiderController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
-            'phone' => 'required|string|unique:riders,phone|regex:/^256[0-9]{9}$/',
-            'password' => 'required|string|min:6|confirmed', // expects password_confirmation field
-            'national_id' => ['required','string','size:14','unique:riders,national_id','regex:/^[A-Z]{2}[0-9]{8}[A-Z0-9]{4}$/i'],
+            'phone' => 'required|string|unique:transporters,phone|regex:/^256[0-9]{9}$/',
+            'password' => 'required|string|min:6|confirmed',
+            'national_id' => ['required','string','size:14','unique:transporters,national_id','regex:/^[A-Z]{2}[0-9]{8}[A-Z0-9]{4}$/i'],
             'driving_permit' => 'nullable|string|max:50',
         ], [
             'national_id.required' => 'Valid National ID (NIN) is mandatory - 14 chars',
@@ -26,22 +26,22 @@ class RiderController extends Controller
             'phone.regex' => 'Phone must be in 2567XXXXXXXX format'
         ]);
 
-        $rider = rider::create([
+        $transporter = Transporter::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'national_id' => strtoupper($request->national_id),
             'driving_permit' => $request->driving_permit,
-            'status' => 'pending_payment', // Changed for Pro flow
+            'status' => 'pending_payment',
             'is_pro' => false,
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Account created, proceed to Pro payment',
-            'riderId' => $rider->id,
-            'rider' => $rider
+            'transporterId' => $transporter->id,
+            'transporter' => $transporter
         ], 201);
     }
 
@@ -49,13 +49,12 @@ class RiderController extends Controller
     public function initiateProPayment(Request $request)
     {
         $request->validate([
-            'riderId' => 'required|exists:riders,id',
+            'transporterId' => 'required|exists:transporters,id',
             'phone' => 'required|string'
         ]);
 
-        $rider = rider::findOrFail($request->riderId);
+        $transporter = Transporter::findOrFail($request->transporterId);
 
-        // MTN MoMo Config - will use sandbox for now
         $externalId = (string) Str::uuid();
         $momoPayload = [
             'amount' => '250000',
@@ -63,37 +62,28 @@ class RiderController extends Controller
             'externalId' => $externalId,
             'payer' => [
                 'partyIdType' => 'MSISDN',
-                'partyId' => $request->phone // 2567XXXXXXXX
+                'partyId' => $request->phone
             ],
             'payerMessage' => 'Deliver Uganda Pro Package',
-            'payeeNote' => 'Pro rider Activation - ID '.$rider->id
+            'payeeNote' => 'Pro transporter Activation - ID '.$transporter->id
         ];
-
-        // TODO: Call MTN API here - for now we return payload ready for frontend
-        // In real: $response = Http::withHeaders([...])->post($mtnUrl, $momoPayload);
-
-        // Store transaction as pending
-        // $rider->transactions()->create([...]);
 
         return response()->json([
             'success' => true,
             'message' => 'MoMo prompt sent to '.$request->phone.' Dial *165# to approve 250k',
             'momoPayload' => $momoPayload,
-            'payUrl' => '/pay-pro?riderId='.$rider->id.'&tx='.$externalId
+            'payUrl' => '/pay-pro?transporterId='.$transporter->id.'&tx='.$externalId
         ]);
     }
 
     // 3. Webhook - MTN will call this after payment
     public function momoCallback(Request $request)
     {
-        // Verify MTN signature here
-        $riderId = $request->input('externalId'); // or parse from payeeNote
-        // Simplified: find by externalId
-        // $rider = rider::where('external_id', $request->externalId)->first();
-        // For now expect rider_id in callback
-        if($request->has('rider_id')){
-            $rider = rider::find($request->rider_id);
-            $rider->update(['status' => 'active', 'is_pro' => true]);
+        if($request->has('transporter_id')){
+            $transporter = Transporter::find($request->transporter_id);
+            if($transporter){
+                $transporter->update(['status' => 'active', 'is_pro' => true]);
+            }
         }
 
         return response()->json(['status' => 'ok']);

@@ -13,7 +13,7 @@ document.getElementById('app').innerHTML = `
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link active" href="#">🏠 Dashboard</a></li>
           <li class="nav-item"><a class="nav-link" href="#">📦 Orders</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">🏍️ Riders</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">🚚 Transporters</a></li>
           <li class="nav-item"><a class="nav-link" href="#">👥 Customers</a></li>
           <li class="nav-item"><span class="badge bg-warning text-dark mt-2">🎙️ Voice ON</span></li>
         </ul>
@@ -38,11 +38,11 @@ document.getElementById('app').innerHTML = `
           <p id="status" class="mt-3 small text-muted text-center">Tap mic to record address</p>
           <audio id="player" controls class="w-100 mt-2 d-none"></audio>
           <div id="wave" class="mt-2 d-none text-center">
-            <span class="badge bg-success rounded-pill px-3 py-2">✅ Voice Saved! Rider will hear it!</span>
+            <span class="badge bg-success rounded-pill px-3 py-2">✅ Voice Saved! Transporter will hear it!</span>
           </div>
 
           <button class="btn btn-lg w-100 mt-4 text-white fw-bold rounded-pill" style="background:#6f42c1;">Order Now — Pay with MoMo</button>
-          <p class="text-center mt-2 small">🔒 0 Vulnerabilities • Secure</p>
+          <p class="text-center mt-2 small">🔒 0 Vulnerabilities • Secure • 100% Transporter</p>
         </div>
       </div>
     </div>
@@ -77,7 +77,7 @@ recBtn.onclick = async () => {
         player.src = URL.createObjectURL(blob);
         player.classList.remove('d-none');
         wave.classList.remove('d-none');
-        status.innerText = '✅ Ready to send to rider!';
+        status.innerText = '✅ Ready to send to transporter!';
         addressInput.placeholder = "✅ Voice address recorded";
       };
       mediaRecorder.start();

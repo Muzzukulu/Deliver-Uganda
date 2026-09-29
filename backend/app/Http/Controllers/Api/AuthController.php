@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Rider; // CAPITAL R - this is the fix!
+use App\Models\Transporter;
 use App\Models\User;
 use App\Models\SuspiciousAttempt;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class AuthController extends Controller
             'phone' => 'required|string|unique:users,phone',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'national_id' => 'required|string|unique:users,national_id', // National ID standard for clients too!
+            'national_id' => 'required|string|unique:users,national_id',
         ]);
         $user = User::create([
             'name' => $request->name,
@@ -26,8 +26,8 @@ class AuthController extends Controller
             'national_id' => strtoupper($request->national_id),
             'password' => Hash::make($request->password),
         ]);
-        $token = $user->createToken('customer-token')->plainTextToken;
-        return response()->json(['message' => 'Customer account created successfully!', 'token' => $token, 'user' => $user], 201);
+        $token = $user->createToken('client-token')->plainTextToken;
+        return response()->json(['message' => 'Client account created successfully!', 'token' => $token, 'user' => $user], 201);
     }
 
     public function clientLogin(Request $request)
@@ -37,7 +37,7 @@ class AuthController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        $token = $user->createToken('customer-token')->plainTextToken;
+        $token = $user->createToken('client-token')->plainTextToken;
         return response()->json(['token' => $token, 'user' => $user]);
     }
 
@@ -46,8 +46,8 @@ class AuthController extends Controller
         $request->validate([
             'first_name' => 'required|string',
             'name' => 'required|string',
-            'phone' => 'required|string|unique:riders,phone',
-            'national_id' => 'required|string|unique:riders,national_id|regex:/^CM[A-Z0-9]{12,}$/i',
+            'phone' => 'required|string|unique:transporters,phone',
+            'national_id' => 'required|string|unique:transporters,national_id|regex:/^CM[A-Z0-9]{12,}$/i',
             'driving_permit' => 'nullable|string',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -61,7 +61,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Verification Failed: This phone number is linked to a reported case'], 403);
         }
         
-        $rider = Rider::create([ // CAPITAL R
+        $transporter = Transporter::create([
             'first_name' => $request->first_name, 
             'name' => $request->name, 
             'phone' => $phone,
@@ -76,19 +76,18 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate(['phone' => 'required', 'password' => 'required']);
-        $rider = Rider::where('phone', $request->phone)->first(); // CAPITAL R
-        if (!$rider || !Hash::check($request->password, $rider->password)) {
+        $transporter = Transporter::where('phone', $request->phone)->first();
+        if (!$transporter || !Hash::check($request->password, $transporter->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        $token = $rider->createToken('rider-token')->plainTextToken;
-        return response()->json(['token' => $token, 'rider' => $rider]);
+        if ($transporter->status !== 'approved') {
+             return response()->json(['message' => 'Account pending approval'], 403);
+        }
+        $token = $transporter->createToken('transporter-token')->plainTextToken;
+        return response()->json(['token' => $token, 'transporter' => $transporter]);
     }
 
-    // Aliases for new standard routes
-    public function riderRegister(Request $request) { return $this->register($request); }
-    public function riderLogin(Request $request) { return $this->login($request); }
-    
-    // Keep old driver names working for 1 month
-    public function driverRegister(Request $request) { return $this->register($request); }
-    public function driverLogin(Request $request) { return $this->login($request); }
+    // Standard routes
+    public function transporterRegister(Request $request) { return $this->register($request); }
+    public function transporterLogin(Request $request) { return $this->login($request); }
 }

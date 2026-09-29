@@ -12,7 +12,7 @@ return new class extends Migration
                 $table->decimal('price_usd', 8, 2)->nullable()->after('price');
             }
             if (!Schema::hasColumn('orders', 'price_ugx')) {
-                $table->integer('price_ugx')->nullable();
+                $table->decimal('price_ugx', 10, 2)->nullable();
             }
             if (!Schema::hasColumn('orders', 'rate_used')) {
                 $table->decimal('rate_used', 10, 2)->nullable();
@@ -20,20 +20,20 @@ return new class extends Migration
             if (!Schema::hasColumn('orders', 'delivery_fee_usd')) {
                 $table->decimal('delivery_fee_usd', 8, 2)->nullable();
             }
-            if (!Schema::hasColumn('orders', 'driver_commission_usd')) {
-                $table->decimal('driver_commission_usd', 8, 2)->nullable();
+            if (!Schema::hasColumn('orders', 'transporter_commission_usd')) {
+                $table->decimal('transporter_commission_usd', 8, 2)->nullable();
             }
             if (!Schema::hasColumn('orders', 'platform_profit_usd')) {
                 $table->decimal('platform_profit_usd', 8, 2)->nullable();
             }
             if (!Schema::hasColumn('orders', 'commission_rate')) {
-                $table->integer('commission_rate')->default(70);
+                $table->decimal('commission_rate', 5, 2)->default(20.00);
             }
             if (!Schema::hasColumn('orders', 'payment_status')) {
                 $table->string('payment_status')->default('pending');
             }
-            if (!Schema::hasColumn('orders', 'driver_id')) {
-                $table->unsignedBigInteger('driver_id')->nullable();
+            if (!Schema::hasColumn('orders', 'transporter_id')) {
+                $table->foreignId('transporter_id')->nullable()->constrained('transporters')->onDelete('set null');
             }
             if (!Schema::hasColumn('orders', 'exchange_rate')) {
                 $table->decimal('exchange_rate', 10, 2)->nullable();

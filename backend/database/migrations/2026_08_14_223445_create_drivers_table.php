@@ -11,15 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drivers', function (Blueprint $table) {
+        Schema::create('transporters', function (Blueprint $table) {
             $table->id();
-            $table->string('fullName');
+            $table->string('first_name');
+            $table->string('name');
             $table->string('phone')->unique();
-            $table->string('numberPlate');
-            $table->string('nationalId_path');
-            $table->string('drivingPermit_path');
-            $table->string('lcLetter_path');
-            $table->string('passportPhoto_path');
+            $table->string('national_id')->unique();
+            $table->string('driving_permit')->nullable();
+            $table->string('password');
+            $table->string('number_plate')->nullable();
+            $table->string('national_id_path')->nullable();
+            $table->string('driving_permit_path')->nullable();
+            $table->string('lc_letter_path')->nullable();
+            $table->string('passport_photo_path')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('drivers');
+        Schema::dropIfExists('transporters');
     }
 };

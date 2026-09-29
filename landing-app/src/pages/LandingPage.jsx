@@ -93,7 +93,7 @@ export default function LandingPage() {
           <p className="text-white/90 text-[16px] mt-5 max-w-[460px] leading-[1.7]">Deliver Uganda provides seamless nationwide parcel movement using modern fleet technology and trusted professional couriers. From Kampala to your village — same day.</p>
           <div className="flex flex-col sm:flex-row gap-4 mt-8">
             <button onClick={() => navigate('/register')} className="bg-white text-[#3C1F6B] px-6 py-3 rounded-lg text-[14px] font-bold">Send a Parcel</button>
-            <button className="border border-white text-white px-6 py-3 rounded-lg text-[14px] font-bold">Become a Driver</button>
+            <button onClick={() => navigate('/transport/register')} className="border border-white text-white px-6 py-3 rounded-lg text-[14px] font-bold">Become a Transporter</button>
           </div>
         </div>
         <div className="w-full h-[340px] lg:h-auto bg-gray-100">
@@ -106,7 +106,7 @@ export default function LandingPage() {
         <h2 className="font-black text-[26px] text-center text-[#2D0F5A]">Why Choose Deliver Uganda</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-[1200px] mx-auto mt-12">
           <div className="text-center bg-white p-6 rounded-2xl border border-[#ede6ff]"><div className="w-[52px] h-[52px] bg-[#f3e8ff] rounded-full mx-auto flex items-center justify-center">💰</div><h4 className="font-bold text-[13px] mt-4 text-[#2D0F5A]">Affordable Rates</h4><p className="text-[11px] text-gray-500 mt-2 leading-relaxed">Transparent pricing, no hidden fees. Pay for distance & weight only, with real value.</p></div>
-          <div className="text-center bg-white p-6 rounded-2xl border border-[#ede6ff]"><div className="w-[52px] h-[52px] bg-[#f3e8ff] rounded-full mx-auto flex items-center justify-center">👨‍✈️</div><h4 className="font-bold text-[13px] mt-4 text-[#2D0F5A]">Professional Drivers</h4><p className="text-[11px] text-gray-500 mt-2 leading-relaxed">Verified NIN, licensed, trained and rated. Your parcel is safe with us.</p></div>
+          <div className="text-center bg-white p-6 rounded-2xl border border-[#ede6ff]"><div className="w-[52px] h-[52px] bg-[#f3e8ff] rounded-full mx-auto flex items-center justify-center">👨‍✈️</div><h4 className="font-bold text-[13px] mt-4 text-[#2D0F5A]">Professional Transporters</h4><p className="text-[11px] text-gray-500 mt-2 leading-relaxed">Verified NIN, licensed, trained and rated. Your parcel is safe with us.</p></div>
           <div className="text-center bg-white p-6 rounded-2xl border border-[#ede6ff]"><div className="w-[52px] h-[52px] bg-[#f3e8ff] rounded-full mx-auto flex items-center justify-center text-[12px] font-black text-[#5B21B6]">UG</div><h4 className="font-bold text-[13px] mt-4 text-[#2D0F5A]">Nationwide Coverage</h4><p className="text-[11px] text-gray-500 mt-2 leading-relaxed">From Arua to Kabale, Mbale to Mbarara. We reach cities and towns daily.</p></div>
           <div className="text-center bg-white p-6 rounded-2xl border border-[#ede6ff]"><div className="w-[52px] h-[52px] bg-[#f3e8ff] rounded-full mx-auto flex items-center justify-center">🎧</div><h4 className="font-bold text-[13px] mt-4 text-[#2D0F5A]">24/7 Support</h4><p className="text-[11px] text-gray-500 mt-2 leading-relaxed">Always on WhatsApp, call, and live chat. Human help, not robots.</p></div>
         </div>
@@ -118,10 +118,10 @@ export default function LandingPage() {
           <h2 className="font-bold text-[24px] text-center text-[#2D0F5A]">About Us</h2>
           <div className="mt-8 bg-[#faf7ff] border border-[#ede6ff] rounded-2xl p-6 lg:p-10">
             <p className="text-[14px] text-gray-700 leading-[1.8]">
-              <span className="font-bold text-[#3C1F6B]">Deliver Uganda</span> is a homegrown logistics powerhouse built to connect every corner of Uganda — from Kampala to Arua, Mbarara to Mbale. We were born from a simple frustration: parcels delayed, overpriced, and untraceable. So we built a smarter fleet, trained professional riders and drivers, and powered everything with real-time technology that gives you control.
+              <span className="font-bold text-[#3C1F6B]">Deliver Uganda</span> is a homegrown logistics powerhouse built to connect every corner of Uganda — from Kampala to Arua, Mbarara to Mbale. We were born from a simple frustration: parcels delayed, overpriced, and untraceable. So we built a smarter fleet, trained professional transporters and drivers, and powered everything with real-time technology that gives you control.
             </p>
             <p className="text-[14px] text-gray-700 leading-[1.8] mt-5">
-              We serve everyday Ugandans, SMEs, and big businesses with same-day delivery, secure handling, and nationwide coverage that actually reaches your village. Every parcel is tracked live, every driver is verified, and every delivery is handled as if it were our own. No stories, just results.
+              We serve everyday Ugandans, SMEs, and big businesses with same-day delivery, secure handling, and nationwide coverage that actually reaches your village. Every parcel is tracked live, every transporter is verified, and every delivery is handled as if it were our own. No stories, just results.
             </p>
             <p className="text-[14px] text-gray-700 leading-[1.8] mt-5">
               Our mission is to be Uganda's most trusted delivery backbone — affordable, fast, and reliable 24/7. When you send with Deliver Uganda, you send with Uganda.
