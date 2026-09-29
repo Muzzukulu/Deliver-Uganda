@@ -18,5 +18,5 @@ class Transporter extends Authenticatable
         'status',
     ];
 
-    protected $hidden = ['password'];
+    protected $hidden = ['password', 'national_id', 'remember_token'];
 }
