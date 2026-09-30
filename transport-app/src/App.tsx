@@ -1,2 +1,5 @@
-import RiderDashboard from "./pages/RiderDashboard";
-export default function App() { return <RiderDashboard /> }
+import TransporterDashboard from "./pages/TransporterDashboard";
+
+export default function App() { 
+  return <TransporterDashboard /> 
+}
