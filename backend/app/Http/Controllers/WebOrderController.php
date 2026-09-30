@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Order;
 
-class OrderController extends Controller
+class WebOrderController extends Controller
 {
   public function index() { 
     return Order::latest()->get(); 
