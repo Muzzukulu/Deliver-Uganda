@@ -9,6 +9,7 @@ import Checkout from "./pages/Checkout.jsx";
 import Register from "./pages/Register.jsx";
 import Orders from "./pages/Orders.jsx";
 import AdminChat from './pages/AdminChat'
+import Track from './pages/Track' // ✅ NEW
 
 export default function App() {
   return (
@@ -24,6 +25,8 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/driver/register" element={<Register />} />
         <Route path="/admin" element={<AdminChat />} />
+        <Route path="/track/:id" element={<Track />} /> {/* ✅ GPS TRACK */}
+        <Route path="/t/:id" element={<Track />} /> {/* ✅ SHORT LINK */}
       </Routes>
       <LiveChat />
     </BrowserRouter>

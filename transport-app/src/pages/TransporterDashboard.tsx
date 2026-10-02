@@ -1,55 +1,74 @@
-import { useState, useEffect } from "react";
-import { filterNearbyOrders } from "../hooks/useNearbyOrders";
+import { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
-// Mock - replace with your backend later
-const MOCK_ORDERS = [
-  { id: 'ORD-001', customer: 'Sarah', lat: 0.3476, lng: 32.5825, address: 'Nakasero, Kampala', amount: '15,000 UGX' },
-  { id: 'ORD-002', customer: 'John', lat: 0.3136, lng: 32.5811, address: 'Kabalagala', amount: '12,000 UGX' },
-  { id: 'ORD-003', customer: 'Amina', lat: 0.4244, lng: 32.5858, address: 'Kawempe - FAR', amount: '20,000 UGX' },
-];
-
-export default function RiderDashboard() {
+export default function TransporterDashboard() {
+  const { trackerId } = useParams();
   const [isOnline, setIsOnline] = useState(true);
-  // Mock rider location - Central Kampala
   const [myRider] = useState({ lat: 0.3476, lng: 32.5825, name: 'Muzzukulu' });
-  const [orders, setOrders] = useState(MOCK_ORDERS);
+  const [orders, setOrders] = useState<any[]>([
+    { id: 'DU-1665-8Q', customer: 'Sarah', lat: 0.3476, lng: 32.5825, address: 'Kampala → Entebbe', amount: '15,000 UGX' }
+  ]);
+  const [activeTracker, setActiveTracker] = useState<string | null>(trackerId || null);
+  const [isLive, setIsLive] = useState(!!trackerId);
+  const watchId = useRef<number | null>(null);
 
-  const nearbyOrders = filterNearbyOrders(orders, myRider);
+  const handleAccept = async (orderId: string) => {
+    setActiveTracker(orderId);
+    setIsLive(true);
+    if (navigator.geolocation) {
+      watchId.current = navigator.geolocation.watchPosition(
+        async (pos) => {
+          try { await axios.post(`http://127.0.0.1:8000/api/orders/${orderId}/location`, { lat: pos.coords.latitude, lng: pos.coords.longitude }); } catch {}
+        },
+        undefined,
+        { enableHighAccuracy: true }
+      ) as any;
+    }
+  };
 
-  const handleAccept = (orderId) => {
-    alert(`Accepted ${orderId}! Ride to customer! 🛵`);
-    setOrders(orders.filter(o => o.id!== orderId));
+  const stopTrip = async () => {
+    if (watchId.current!== null) navigator.geolocation.clearWatch(watchId.current);
+    setIsLive(false);
+    setActiveTracker(null);
+    alert("✅ Delivery Completed!");
   };
 
   return (
-    <div style={{padding: '20px', fontFamily: 'sans-serif', maxWidth: '500px', margin: '0 auto'}}>
-      <h1>🛵 Deliver Uganda</h1>
-      <div style={{background: '#f0f0f0', padding: '15px', borderRadius: '10px', marginBottom: '20px'}}>
-        <p><strong>Rider:</strong> {myRider.name}</p>
-        <p><strong>Location:</strong> {myRider.lat}, {myRider.lng} (Kampala)</p>
-        <label style={{display: 'flex', alignItems: 'center', gap: '10px', marginTop: '10px'}}>
-          <input type="checkbox" checked={isOnline} onChange={e => setIsOnline(e.target.checked)} />
-          {isOnline? '🟢 ONLINE - Receiving orders' : '🔴 OFFLINE'}
+    <div style={{padding: '20px', fontFamily: 'sans-serif', maxWidth: '500px', margin: '0 auto', background: '#fafaf9', minHeight: '100vh'}}>
+      <div style={{textAlign: 'center', marginBottom: '24px', lineHeight: '1.1'}}>
+        <div style={{fontSize: '52px'}}>🛵</div>
+        <h1 style={{margin: 0, lineHeight: '0.95', fontSize: '32px', fontWeight: '900', color: '#5B21B6'}}>Deliver Uganda</h1>
+        <p style={{margin: '6px 0 0 0', fontWeight: '800', color: '#7C3AED', letterSpacing: '5px', fontSize: '13px', background: '#EDE9FE', display: 'inline-block', padding: '4px 12px', borderRadius: '20px'}}>TRANSPORTER</p>
+      </div>
+
+      <div style={{background: 'white', padding: '16px', borderRadius: '16px', marginBottom: '20px'}}>
+        <p><strong style={{color: '#5B21B6'}}>Rider:</strong> {myRider.name}</p>
+        <label style={{display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 'bold'}}>
+          <input type="checkbox" checked={isOnline} onChange={e => setIsOnline(e.target.checked)} style={{accentColor: '#5B21B6'}} />
+          <span style={{color: isOnline? '#16a34a' : '#dc2626'}}>{isOnline? '🟢 ONLINE' : '🔴 OFFLINE'}</span>
         </label>
       </div>
 
-      <h2>Nearby Orders ({isOnline? nearbyOrders.length : 0})</h2>
-      <p style={{fontSize: '12px', color: '#666'}}>Showing orders within 5km using your coverage.js filter</p>
-
-      {!isOnline && <p>Go online to see orders</p>}
-
-      {isOnline && nearbyOrders.map(order => (
-        <div key={order.id} style={{border: '1px solid #ddd', padding: '15px', borderRadius: '10px', marginBottom: '10px'}}>
-          <strong>{order.id} - {order.customer}</strong>
-          <p>📍 {order.address}</p>
-          <p>💰 {order.amount}</p>
-          <button onClick={() => handleAccept(order.id)} style={{background: '#000', color: '#fff', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer', width: '100%'}}>
-            Accept Delivery
-          </button>
+      {activeTracker && isLive && (
+        <div style={{background:'black', color:'white', padding:22, borderRadius:16, marginBottom:20, border: '2px solid #5B21B6'}}>
+          <h2 style={{margin:0, color: '#A78BFA'}}>🟢 LIVE: {activeTracker}</h2>
+          <p style={{fontSize:12}}>Client is watching you on map now!</p>
+          <button onClick={stopTrip} style={{background:'#22c55e', color:'white', padding:'14px', width:'100%', borderRadius:10, border:'none', fontWeight:'900', marginTop:14}}>✅ COMPLETE DELIVERY</button>
         </div>
-      ))}
+      )}
 
-      {isOnline && nearbyOrders.length === 0 && <p>No nearby orders. Move closer to city center!</p>}
+      {!activeTracker && <>
+        <h2 style={{fontSize: '18px', color: '#5B21B6'}}>Nearby Orders</h2>
+        {orders.map(order => (
+          <div key={order.id} style={{border: '1px solid #EDE9FE', padding: '16px', borderRadius: '14px', marginBottom: '12px', background: 'white'}}>
+            <strong>{order.id} - {order.customer}</strong>
+            <p>📍 {order.address}</p>
+            <p style={{color: '#5B21B6', fontWeight: 'bold'}}>💰 {order.amount}</p>
+            <button onClick={() => handleAccept(order.id)} style={{background: '#5B21B6', color: '#fff', padding: '13px', border: 'none', borderRadius: '10px', width: '100%', fontWeight:'800'}}>Accept Delivery</button>
+          </div>
+        ))}
+      </>}
     </div>
   );
 }

@@ -18,45 +18,70 @@ class OrderController extends Controller
     ]);
 
     $order = Order::create([
-      'customer_name' => $request->customer_name ?? 'Guest',
-      'phone' => $request->customer_phone ?? $request->phone ?? '0700000000',
-      'pickup' => $request->pickup_address ?? $request->pickup ?? 'Restaurant',
-      'dropoff' => $request->dropoff_address ?? $request->dropoff ?? $request->address,
-      'price' => $request->price ?? $request->total,
-      'item' => $request->item ?? $request->dropoff_address ?? $request->dropoff ?? 'Food Delivery',
+      'client_id' => $request->client_id ?? null,
+      'pickup_address' => $request->pickup_address ?? $request->pickup ?? 'Restaurant',
+      'dropoff_address' => $request->dropoff_address ?? $request->dropoff ?? $request->address,
+      'package_description' => $request->package_description ?? $request->item ?? $request->dropoff ?? 'Food Delivery',
+      'delivery_fee' => $request->delivery_fee ?? $request->price ?? 0,
+      'price_ugx' => $request->price_ugx ?? $request->total ?? 0,
+      'price_usd' => $request->price_usd ?? 0,
       'status' => 'pending',
-      'total' => $request->price ?? $request->total ?? 0,
-      'address' => $request->dropoff_address ?? $request->address,
-      'exchange_rate' => $request->exchange_rate,
-      'distance_km' => $request->distance_km,
-      'delivery_fee' => $request->delivery_fee,
-      'transporter_payout' => $request->transporter_payout,
-      'platform_fee' => $request->platform_fee,
+      'payment_status' => 'pending',
     ]);
+
     return response()->json($order, 201);
   }
 
-  // Transporter accepts order
   public function accept(Request $request, $id) {
       $order = Order::findOrFail($id);
       $order->update([
           'status' => 'accepted',
-          'transporter_id' => $request->user()->id ?? $request->transporter_id,
+          'transporter_id' => $request->user()?->id ?? $request->transporter_id ?? null,
       ]);
-      return response()->json(['message' => 'Order accepted by transporter', 'order' => $order]);
+      return response()->json(['message' => 'Order accepted', 'order' => $order]);
   }
 
-  // Transporter marks delivered
   public function markDelivered(Request $request, $id) {
       $order = Order::findOrFail($id);
       $order->update(['status' => 'delivered']);
       return response()->json(['message' => 'Order delivered', 'order' => $order]);
   }
 
+  public function transporterOrders(Request $request) {
+      $tid = $request->user()?->id;
+      if($tid){
+          $orders = Order::where('transporter_id', $tid)->latest()->get();
+          if($orders->isEmpty()){
+              $orders = Order::where('status','pending')->latest()->get();
+          }
+          return response()->json($orders);
+      }
+      return response()->json(Order::where('status','pending')->latest()->get());
+  }
+
+  public function track($tracker) {
+      $order = Order::where('parcel_tracker_number', $tracker)
+                    ->orWhere('id', $tracker)
+                    ->firstOrFail();
+      return response()->json($order);
+  }
+
+  public function updateLocation(Request $request, $id) {
+      $order = Order::where('id', $id)
+                    ->orWhere('parcel_tracker_number', $id)
+                    ->firstOrFail();
+      $order->update([
+          'current_lat' => $request->lat,
+          'current_lng' => $request->lng,
+          'status' => 'in_transit'
+      ]);
+      return response()->json(['message'=>'Location updated - Boda is moving!','order'=>$order]);
+  }
+
   public function update(Request $request, $id) {
     $order = Order::findOrFail($id);
     $order->update($request->all());
-    return $order;
+    return response()->json($order);
   }
   
   public function destroy($id) {
