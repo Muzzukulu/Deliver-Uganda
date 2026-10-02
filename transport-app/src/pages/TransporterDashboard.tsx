@@ -1,13 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function TransporterDashboard() {
   const { trackerId } = useParams();
   const [isOnline, setIsOnline] = useState(true);
-  const [myRider] = useState({ lat: 0.3476, lng: 32.5825, name: 'Muzzukulu' });
+  const [myTransporter] = useState({ lat: 0.3476, lng: 32.5825, name: 'Muzzukulu' });
   const [orders, setOrders] = useState<any[]>([
-    { id: 'DU-1665-8Q', customer: 'Sarah', lat: 0.3476, lng: 32.5825, address: 'Kampala → Entebbe', amount: '15,000 UGX' }
+    { id: 'DU-1665-8Q', client: 'Sarah', lat: 0.3476, lng: 32.5825, address: 'Kampala → Entebbe', amount: '15,000 UGX' }
   ]);
   const [activeTracker, setActiveTracker] = useState<string | null>(trackerId || null);
   const [isLive, setIsLive] = useState(!!trackerId);
@@ -43,7 +43,7 @@ export default function TransporterDashboard() {
       </div>
 
       <div style={{background: 'white', padding: '16px', borderRadius: '16px', marginBottom: '20px'}}>
-        <p><strong style={{color: '#5B21B6'}}>Rider:</strong> {myRider.name}</p>
+        <p><strong style={{color: '#5B21B6'}}>Transporter:</strong> {myTransporter.name}</p>
         <label style={{display: 'flex', alignItems: 'center', gap: '10px', fontWeight: 'bold'}}>
           <input type="checkbox" checked={isOnline} onChange={e => setIsOnline(e.target.checked)} style={{accentColor: '#5B21B6'}} />
           <span style={{color: isOnline? '#16a34a' : '#dc2626'}}>{isOnline? '🟢 ONLINE' : '🔴 OFFLINE'}</span>
@@ -62,7 +62,7 @@ export default function TransporterDashboard() {
         <h2 style={{fontSize: '18px', color: '#5B21B6'}}>Nearby Orders</h2>
         {orders.map(order => (
           <div key={order.id} style={{border: '1px solid #EDE9FE', padding: '16px', borderRadius: '14px', marginBottom: '12px', background: 'white'}}>
-            <strong>{order.id} - {order.customer}</strong>
+            <strong>{order.id} - {order.client}</strong>
             <p>📍 {order.address}</p>
             <p style={{color: '#5B21B6', fontWeight: 'bold'}}>💰 {order.amount}</p>
             <button onClick={() => handleAccept(order.id)} style={{background: '#5B21B6', color: '#fff', padding: '13px', border: 'none', borderRadius: '10px', width: '100%', fontWeight:'800'}}>Accept Delivery</button>

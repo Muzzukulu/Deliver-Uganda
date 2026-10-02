@@ -1,24 +1,30 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WebOrderController;
 
-// --- RECEIPT SEARCH - CAPTURE PARCEL NUMBER ONCE ---
-Route::get('/receipt', function () {
-    return view('receipt-search');
-})->name('receipt.search');
+// PUBLIC GATE
+Route::get('/', fn()=> redirect('/client/register'));
+Route::get('/login', [AuthController::class,'showLogin'])->name('login');
+Route::post('/login', [AuthController::class,'login']);
+Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 
-Route::post('/receipt/find', function (\Illuminate\Http\Request $request) {
-    $ptn = strtoupper(trim($request->input('parcel_tracker_number')));
-    return redirect("/receipt/$ptn");
-})->name('receipt.find');
+// CLIENT HOUSE
+Route::get('/client/register', [AuthController::class,'showClientRegister'])->name('client.register');
+Route::post('/client/register', [AuthController::class,'clientRegister']);
+Route::get('/client/login', [AuthController::class,'showClientLogin'])->name('client.login');
+Route::post('/client/login', [AuthController::class,'login']);
 
-// --- PUBLIC TRACKING & RECEIPT PDF ---
-Route::get('/receipt/{ptn}', [OrderController::class, 'receipt'])->name('receipt.pdf');
-Route::get('/track/{ptn}', [OrderController::class, 'track'])->name('order.track');
-Route::get('/r/{ptn}', [OrderController::class, 'receipt']);
-Route::get('/t/{ptn}', [OrderController::class, 'track']);
+// TRANSPORTER HOUSE - YOUR TRUCKS TO TZ, CONGO, KENYA etc
+Route::get('/transporter/register', [AuthController::class,'showTransporterRegister'])->name('transporter.register');
+Route::post('/transporter/register', [AuthController::class,'registerTransporter']);
+Route::get('/transporter/login', [AuthController::class,'showTransporterLogin'])->name('transporter.login');
+Route::post('/transporter/login', [AuthController::class,'login']);
 
-// --- ADMIN HQ SPA ---
-Route::get('/{any}', function () {
-  return view('welcome');
-})->where('any', '.*');
+// DASHBOARDS
+Route::middleware('auth')->group(function(){
+    Route::get('/client/dashboard', [WebOrderController::class,'clientDashboard'])->name('client.dashboard');
+    Route::get('/transporter/dashboard', fn()=>view('transporter.dashboard'))->name('transporter.dashboard');
+    Route::get('/transporter/pending', fn()=>view('transporter.pending'))->name('transporter.pending');
+    Route::get('/admin/dashboard', fn()=>view('admin.dashboard'))->name('admin.dashboard');
+});

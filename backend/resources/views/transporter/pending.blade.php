@@ -1,0 +1,1 @@
+<h1>Pending Approval - Wait for Admin</h1><p>{{auth('transporter')->user()->first_name}}</p>

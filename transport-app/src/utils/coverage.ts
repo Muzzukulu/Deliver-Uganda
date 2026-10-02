@@ -6,7 +6,7 @@ export function getDistanceKm(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-export function canSeeOrder(rider, customer, maxKm = 5) {
-  if(!rider?.lat || !customer?.lat) return false;
-  return getDistanceKm(rider.lat, rider.lng, customer.lat, customer.lng) <= maxKm;
+export function canSeeOrder(transporter, client, maxKm = 5) {
+  if(!transporter?.lat || !client?.lat) return false;
+  return getDistanceKm(transporter.lat, transporter.lng, client.lat, client.lng) <= maxKm;
 }

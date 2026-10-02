@@ -1,0 +1,1 @@
+<h1>Client Dashboard - Welcome {{auth('client')->user()->name}}</h1>

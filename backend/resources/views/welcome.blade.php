@@ -1,28 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Deliver Uganda - Admin HQ | Transporter Command Center</title>
-    <meta name="description" content="Deliver Uganda Admin - Manage transporters, orders, pricing engine">
-    <link rel="icon" href="/favicon.ico">
-    <style>
-      body{margin:0;font-family:system-ui}
-      #app:empty::before{
-        content:'DELIVER UGANDA • Loading Transporter HQ...';
-        display:flex;align-items:center;justify-content:center;
-        height:100vh;font-weight:900;letter-spacing:2px;color:#111;
-        background:#FFCC00;
-      }
-    </style>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <title>DeliverUganda - Tracking</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 antialiased">
-    <div id="app"></div>
-    <noscript>
-      <div style="padding:40px;text-align:center;font-weight:700">
-        Please enable JavaScript — Admin HQ needs it to manage transporters & orders.
-      </div>
-    </noscript>
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center p-4">
+
+  <div class="text-center mb-8">
+    <h1 class="text-5xl font-black text-yellow-400">DELIVER<span class="text-white">UGANDA</span></h1>
+    <p class="text-gray-400 mt-2">Universal Tracking & Payment</p>
+    <p class="text-xs text-gray-600 mt-1">MTN *165# / Airtel *185# — Ref: DU26-XXXX-Q10</p>
+  </div>
+
+  <div class="w-full max-w-lg bg-white rounded-[2rem] p-2 shadow-2xl shadow-yellow-500/20">
+    <form id="trackForm" class="flex">
+      <input
+        id="trackingInput"
+        type="text"
+        placeholder="DU26-0001-Q10"
+        value="DU26-0001-Q10"
+        class="flex-1 px-6 py-4 rounded-full text-black font-bold text-lg outline-none"
+      >
+      <button type="submit" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-black px-6 py-4 rounded-full ml-2 text-sm">
+  TRACK 🚚 or 🏍️
+</button>
+        
+    </form>
+  </div>
+
+  <div class="mt-6 flex gap-2 flex-wrap justify-center">
+    <button onclick="setCode('DU26-0012-Q10')" class="bg-gray-800 px-4 py-2 rounded-full text-xs border border-yellow-400">DU26-0012-Q10</button>
+    <button onclick="setCode('DU26-0013-Q10')" class="bg-gray-800 px-4 py-2 rounded-full text-xs">DU26-0013-Q10</button>
+  </div>
+
+  <script>
+    function setCode(code) {
+      document.getElementById('trackingInput').value = code;
+    }
+    document.getElementById('trackForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      let code = document.getElementById('trackingInput').value.trim();
+      if(code) window.location.href = '/track/' + code;
+    });
+  </script>
+
 </body>
 </html>
