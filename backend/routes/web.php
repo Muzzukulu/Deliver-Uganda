@@ -15,16 +15,18 @@ Route::post('/client/register', [AuthController::class,'clientRegister']);
 Route::get('/client/login', [AuthController::class,'showClientLogin'])->name('client.login');
 Route::post('/client/login', [AuthController::class,'login']);
 
-// TRANSPORTER HOUSE - YOUR TRUCKS TO TZ, CONGO, KENYA etc
+// TRANSPORTER HOUSE
 Route::get('/transporter/register', [AuthController::class,'showTransporterRegister'])->name('transporter.register');
 Route::post('/transporter/register', [AuthController::class,'registerTransporter']);
 Route::get('/transporter/login', [AuthController::class,'showTransporterLogin'])->name('transporter.login');
 Route::post('/transporter/login', [AuthController::class,'login']);
 
-// DASHBOARDS
+// ADMIN HOUSE - ADD THIS
+Route::get('/admin/login', [AuthController::class,'showAdminLogin'])->name('admin.login');
+// DASHBOARDS - ALL THROUGH CONTROLLERS
 Route::middleware('auth')->group(function(){
     Route::get('/client/dashboard', [WebOrderController::class,'clientDashboard'])->name('client.dashboard');
-    Route::get('/transporter/dashboard', fn()=>view('transporter.dashboard'))->name('transporter.dashboard');
-    Route::get('/transporter/pending', fn()=>view('transporter.pending'))->name('transporter.pending');
-    Route::get('/admin/dashboard', fn()=>view('admin.dashboard'))->name('admin.dashboard');
+    Route::get('/transporter/dashboard', [WebOrderController::class,'transporterDashboard'])->name('transporter.dashboard');
+    Route::get('/transporter/pending', [WebOrderController::class,'transporterPending'])->name('transporter.pending');
+    Route::get('/admin/dashboard', [WebOrderController::class,'adminDashboard'])->name('admin.dashboard');
 });

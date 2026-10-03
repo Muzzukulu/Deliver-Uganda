@@ -8,7 +8,7 @@ use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
+class ClientAuthController extends Controller
 {
     // ==================== SHOW FORMS ====================
     public function showClientRegister(){

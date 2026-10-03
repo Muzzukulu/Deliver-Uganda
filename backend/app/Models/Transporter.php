@@ -9,14 +9,15 @@ class Transporter extends Authenticatable
     use HasApiTokens, HasFactory;
 
     protected $fillable = [
-        'first_name',
-        'name',
-        'phone',
-        'national_id',
-        'driving_permit',
-        'password',
-        'status',
-    ];
+    'first_name',
+    'name',
+    'email', // <-- ADD THIS
+    'phone',
+    'national_id',
+    'driving_permit',
+    'password',
+    'status',
+];
 
     protected $hidden = ['password', 'national_id', 'remember_token'];
 }

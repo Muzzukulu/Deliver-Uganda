@@ -2,43 +2,25 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\TransporterController;
-use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\Api\TransporterController;
 
-// === CLIENT - Singular only ===
-Route::post('/client/register', [AuthController::class, 'clientRegister']);
-Route::post('/register', [AuthController::class, 'clientRegister']);
+Route::post('/login', [AuthController::class,'login']);
+Route::post('/register', [AuthController::class,'register']);
 
-Route::post('/client/login', [AuthController::class, 'clientLogin']);
-Route::post('/login', [AuthController::class, 'clientLogin']);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/user', [AuthController::class,'user']);
+    
+    // ORDERS - ALL PROTECTED NOW
+    Route::post('/orders', [OrderController::class,'store']);
+    Route::get('/orders', [OrderController::class,'index']);
+    Route::post('/orders/{id}/accept', [OrderController::class,'accept']);
+    Route::post('/orders/{id}/deliver', [OrderController::class,'markDelivered']);
+    Route::get('/transporter/orders', [OrderController::class,'transporterOrders']);
+    Route::post('/transporter/location', [OrderController::class,'updateLocation']);
 
-Route::get('/orders/track/{tracker}', [OrderController::class, 'track']);
-Route::post('/orders/{id}/location', [OrderController::class, 'updateLocation']);
-
-// === TRANSPORTER - Singular only, matches your folder! ===
-Route::post('/transporter/register', [AuthController::class, 'transporterRegister']);
-Route::post('/transporter/login', [AuthController::class, 'transporterLogin']);
-Route::post('/transporter/pay-pro', [TransporterController::class, 'initiateProPayment']);
-Route::post('/payments/momo-callback', [TransporterController::class, 'momoCallback']);
-
-// === ADMIN ===
-Route::post('/admin/login', [AdminAuthController::class, 'login']);
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/admin/transporter/pending', [AdminAuthController::class, 'pendingTransporters']);
-    Route::post('/admin/transporter/{id}/approve', [AdminAuthController::class, 'approveTransporter']);
+    Route::get('/transporters', [TransporterController::class,'index']);
+    Route::get('/transporters/{id}', [TransporterController::class,'show']);
 });
 
-// === ORDERS - DU-XXXX TRACKER - PUBLIC FOR TESTING ===
-Route::post('/orders', [OrderController::class, 'store']);
-Route::get('/orders', [OrderController::class, 'index']);
-Route::post('/orders/{id}/accept', [OrderController::class, 'accept']);
-Route::post('/orders/{id}/delivered', [OrderController::class, 'markDelivered']);
-Route::get('/transporter/orders', [OrderController::class, 'transporterOrders']);
-
-// === PROTECTED PROFILE ===
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/transporter/me', [TransporterController::class, 'me']);
-    Route::get('/client/me', [AuthController::class, 'clientMe']);
-    Route::post('/logout', [AuthController::class, 'logout']);
-});
+Route::get('/track/{tracker}', [OrderController::class,'track']);
+Route::post('/track/{tracker}/confirm-payment', [OrderController::class,'confirmPayment'] ?? [OrderController::class,'track']);

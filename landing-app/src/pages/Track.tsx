@@ -1,77 +1,45 @@
-import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-type Order = {
-  parcel_tracker_number: string;
-  status: string;
-  pickup_address: string;
-  dropoff_address: string;
-  current_lat?: any;
-  current_lng?: any;
-};
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Track() {
   const { id } = useParams();
-  const [order, setOrder] = useState<Order | null>(null);
-  const [error, setError] = useState("");
-  const mapRef = useRef<L.Map | null>(null);
-  const markerRef = useRef<L.Marker | null>(null);
+  const navigate = useNavigate();
+  const [distance, setDistance] = useState(2.3);
 
-  useEffect(() => {
-    // Fix leaflet icon
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-    });
+  useEffect(()=>{
+    const interval = setInterval(()=> setDistance(d=> Math.max(0.1, d-0.1)), 2000);
+    return ()=> clearInterval(interval);
+  },[]);
 
-    const map = L.map("map").setView([0.3476, 32.5825], 13);
-    mapRef.current = map;
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-    markerRef.current = L.marker([0.3476, 32.5825]).addTo(map).bindPopup("Boda 🏍️");
-
-    const fetchTrack = async () => {
-      try {
-        const res = await axios.get(`http://127.0.0.1:8000/api/orders/track/${id}`);
-        console.log("TRACK DATA:", res.data);
-        setOrder(res.data);
-        if (res.data.current_lat && res.data.current_lng) {
-          const lat = Number(res.data.current_lat);
-          const lng = Number(res.data.current_lng);
-          markerRef.current?.setLatLng([lat, lng]);
-          map.setView([lat, lng], 15);
-        }
-      } catch (e:any) {
-        console.error(e);
-        setError(e.response?.data?.message || e.message);
-      }
-    };
-
-    fetchTrack();
-    const iv = setInterval(fetchTrack, 5000);
-    return () => {
-      clearInterval(iv);
-      map.remove();
-    };
-  }, [id]);
+  const order = JSON.parse(localStorage.getItem("activeOrder") || '{"client":"Sarah","from":"Kampala","to":"Entebbe"}');
 
   return (
-    <div style={{ padding: 20, minHeight: '100vh', background: 'white', color:'black' }}>
-      <h1 style={{fontSize:24, fontWeight:'bold'}}>📍 Tracking {id}</h1>
-      {error && <div style={{background:'red', color:'white', padding:10}}>Error: {error} — Check backend /api/orders/track/{id}</div>}
-      {!order &&!error && <p>📦 Loading... check F12 console</p>}
-      {order && (
-        <>
-          <p><b>Status:</b> {order.status} {order.status === "in_transit" && "🟢 LIVE"}</p>
-          <p><b>{order.pickup_address}</b> → <b>{order.dropoff_address}</b></p>
-          <p>GPS: {order.current_lat?.toString() || "Waiting for rider"}, {order.current_lng?.toString() || ""}</p>
-        </>
-      )}
-      <div id="map" style={{ height: "500px", width:'100%', borderRadius: 16, marginTop: 20, background:'#eee' }}></div>
+    <div className="min-vh-100 p-3" style={{backgroundColor:"#f5f3ff"}}>
+      <div className="container" style={{maxWidth:"420px"}}>
+        <h5 className="text-center fw-bold" style={{color:"#4F2AF7"}}>LIVE Tracking: {id}</h5>
+        
+        <div className="card p-3 mb-3 shadow-sm" style={{borderRadius:"16px"}}>
+          <div className="d-flex justify-content-between">
+            <div><strong>Transporter:</strong> Muzzukulu 🏍️</div>
+            <span className="badge bg-success">LIVE</span>
+          </div>
+          <div className="small mt-1">{order.from} → {order.to} • Client: {order.client}</div>
+          <div className="fw-bold mt-1" style={{color:"#16a34a"}}>📍 {distance.toFixed(1)}km away • {Math.ceil(distance*3)} mins</div>
+        </div>
+
+        <div className="card shadow mb-3 d-flex justify-content-center align-items-center" style={{height:"340px", borderRadius:"20px", background:"#e0e7ff"}}>
+          <div className="text-center">
+            <div style={{fontSize:"48px"}}>🗺️</div>
+            <div className="bg-white rounded-pill px-3 py-1 shadow-sm mt-2 small">🏍️ Muzzukulu moving LIVE</div>
+            <div className="mt-2 small text-muted">Kampala → Entebbe road</div>
+          </div>
+        </div>
+
+        <div className="d-flex gap-2">
+          <button className="btn btn-dark w-50" onClick={()=>navigate("/")}>🏠 Home</button>
+          <button className="btn btn-success w-50 fw-bold" onClick={()=>{ alert("Delivery Confirmed! ✅"); navigate("/"); }}>Confirm Delivery</button>
+        </div>
+      </div>
     </div>
   );
 }

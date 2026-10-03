@@ -46,7 +46,7 @@ class OrderController extends Controller
       'order_year_code' => 'DU' . $year,
       'order_month' => $month,
       // === FIXED: client_id now works with Sanctum ===
-      'client_id' => auth()->id() ?? $request->user()?->id ?? $request->client_id,
+      'client_id' => $request->user()?->id ?? $request->client_id ?? null,
       'pickup_address' => $request->pickup_address ?? $request->pickup ?? 'Restaurant',
       'pickup_lat' => $request->pickup_lat ?? 0.3476,
       'pickup_lng' => $request->pickup_lng ?? 32.5825,
