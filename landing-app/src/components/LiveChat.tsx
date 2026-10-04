@@ -24,15 +24,16 @@ export default function LiveChat() {
         )}
       </button>
 
-      {/* Chat Window - PERFECT MOBILE WIDTH FIX */}
+       {/* Chat Window - PERFECT MOBILE WIDTH FIX - NO OVERFLOW */}
       {isOpen && (
         <div className="
           fixed bottom-[88px] left-2 right-2
           sm:left-auto sm:right-5
-          w-auto sm:w-[380px]
+          w-auto sm:w-[380px] max-w-[calc(100vw-16px)] sm:max-w-[380px]
           h-[70vh] sm:h-[560px] max-h-[560px]
           bg-white rounded-2xl shadow-2xl border border-gray-100
           flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-2
+          box-border
         ">
           {view === 'entrance' && (
             <LiveChatEntrance
