@@ -4,7 +4,7 @@ export default function LiveChatEntrance({ onSelectTransporters, onSelectManagem
   onSelectManagement: () => void;
 }) {
   return (
-    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-[360px] border-t-[3px] border-purple-600 flex flex-col justify-center h-full p-7">
+    <div className="bg-white sm:rounded-2xl sm:shadow-2xl w-full max-w-full sm:max-w-[360px] border-t-[3px] border-purple-600 flex flex-col justify-center h-full p-7 box-border overflow-hidden">
       <div className="text-center mb-7">
         <h2 className="text-[19px] font-bold text-[#0f172a] leading-tight">Welcome to Deliver Uganda</h2>
         <p className="text-[14px] text-gray-500 mt-2.5 leading-snug">Who would you like to contact?</p>

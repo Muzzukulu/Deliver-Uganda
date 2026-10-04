@@ -1,4 +1,4 @@
-// src/components/LiveChat.tsx - PRO RESPONSIVE 560px TALL - FIXED WIDTH
+// src/components/LiveChat.tsx - PRO RESPONSIVE 560px TALL - FINAL ALIGNED
 import { useState } from 'react';
 import LiveChatEntrance from './LiveChatEntrance.tsx';
 import TransporterChatBox from './TransporterChatBox.tsx';
@@ -12,7 +12,6 @@ export default function LiveChat() {
 
   return (
     <>
-      {/* Floating Button - toggles to X */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-5 right-5 w-14 h-14 rounded-full bg-[#3c0f6e] text-white shadow-2xl flex items-center justify-center z-[60] hover:bg-[#4c1f8e] transition-all"
@@ -24,29 +23,11 @@ export default function LiveChat() {
         )}
       </button>
 
-       {/* Chat Window - PERFECT MOBILE WIDTH FIX - NO OVERFLOW */}
       {isOpen && (
-        <div className="
-          fixed bottom-[88px] left-2 right-2
-          sm:left-auto sm:right-5
-          w-auto sm:w-[380px] max-w-[calc(100vw-16px)] sm:max-w-[380px]
-          h-[70vh] sm:h-[560px] max-h-[560px]
-          bg-white rounded-2xl shadow-2xl border border-gray-100
-          flex flex-col overflow-hidden z-50 animate-in slide-in-from-bottom-2
-          box-border
-        ">
-          {view === 'entrance' && (
-            <LiveChatEntrance
-              onSelectTransporters={() => setView('transporter')}
-              onSelectManagement={() => setView('management')}
-            />
-          )}
-          {view === 'transporter' && (
-            <TransporterChatBox onBack={() => setView('entrance')} />
-          )}
-          {view === 'management' && (
-            <ManagementChatBox onBack={() => setView('entrance')} />
-          )}
+        <div className="fixed bottom-[88px] left-2 right-2 w-auto max-w-[calc(100vw-16px)] sm:left-auto sm:right-5 sm:w-[380px] sm:max-w-[380px] h-[70vh] sm:h-[560px] max-h-[560px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden overflow-x-hidden z-50 animate-in slide-in-from-bottom-2 box-border">
+          {view === 'entrance' && <LiveChatEntrance onSelectTransporters={() => setView('transporter')} onSelectManagement={() => setView('management')} />}
+          {view === 'transporter' && <TransporterChatBox onBack={() => setView('entrance')} />}
+          {view === 'management' && <ManagementChatBox onBack={() => setView('entrance')} />}
         </div>
       )}
     </>
