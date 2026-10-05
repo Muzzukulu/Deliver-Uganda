@@ -1,58 +1,75 @@
-// src/components/LiveChatEntrance.tsx - BIGGER FONTS + FILLS HEIGHT
+// src/components/LiveChatEntrance.tsx - SHOPIFY CLEAN LIKE SCREENSHOT
 export default function LiveChatEntrance({ onSelectTransporters, onSelectManagement }: {
   onSelectTransporters: () => void;
   onSelectManagement: () => void;
 }) {
   return (
-    <div className="bg-white sm:rounded-2xl sm:shadow-2xl w-full max-w-full sm:max-w-[360px] border-t-[3px] border-purple-600 flex flex-col justify-center h-full p-7 box-border overflow-hidden">
-      <div className="text-center mb-7">
-        <h2 className="text-[19px] font-bold text-[#0f172a] leading-tight">Welcome to Deliver Uganda</h2>
-        <p className="text-[14px] text-gray-500 mt-2.5 leading-snug">Who would you like to contact?</p>
+    <div className="bg-white w-full h-full flex flex-col">
+      {/* HEADER - Like Shopify "New conversation" */}
+      <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 shrink-0">
+        <button className="text-[13px] font-semibold text-gray-700 flex items-center gap-1">
+          New conversation <span className="text-[10px]">▼</span>
+        </button>
+        <div className="flex items-center gap-3 text-gray-400">
+          <span className="text-[16px]">⚙</span>
+        </div>
       </div>
 
-      <div className="space-y-4">
-        {/* TRANSPORTER NETWORK */}
-        <button
-          onClick={onSelectTransporters}
-          className="w-full text-left p-4.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-100 transition-colors"
-        >
-          <div className="flex items-start gap-3.5">
-            <span className="text-[22px] leading-none">🚚</span>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-[16px] text-[#0f172a] leading-tight">Our Transporter Network</h3>
-              <p className="text-[13.5px] text-gray-600 mt-1.5 leading-[1.5]">
-                I need to send a parcel. Connect me to available transporters within my 5km area.
-              </p>
-              <span className="inline-block mt-3 text-[11px] bg-gray-100 text-gray-600 px-3 py-1 rounded-full font-medium">
-                Voice + Text • Fastest
-              </span>
-            </div>
+      {/* CENTER - Like Shopify "Where should we begin?" */}
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 overflow-y-auto">
+        <div className="w-full max-w-[340px]">
+          <div className="text-center mb-8">
+            <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-[#3c0f6e] flex items-center justify-center text-white text-[18px]">🇺🇬</div>
+            <h2 className="text-[18px] font-bold text-[#0f172a]">Welcome to Deliver Uganda</h2>
+            <p className="text-[13.5px] text-gray-500 mt-1.5">Where should we begin?</p>
           </div>
-        </button>
 
-        {/* MANAGEMENT */}
-        <button
-          onClick={onSelectManagement}
-          className="w-full text-left p-4.5 rounded-xl border border-gray-200 bg-white hover:bg-[#f3f0ff] transition-colors"
-        >
-          <div className="flex items-start gap-3.5">
-            <span className="text-[22px] leading-none">🏢</span>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-[16px] text-[#0f172a] leading-tight">Management & Support</h3>
-              <p className="text-[13.5px] text-gray-600 mt-1.5 leading-[1.5]">
-                For general inquiries, partnerships, or support.
-              </p>
-              <span className="inline-block mt-3 text-[11px] bg-[#f3f0ff] text-[#6d5bd0] px-3 py-1 rounded-full font-medium">
-                Text Only
-              </span>
-            </div>
+          <div className="space-y-3">
+            {/* TRANSPORTER */}
+            <button
+              onClick={onSelectTransporters}
+              className="w-full text-left p-4 rounded-[14px] border border-gray-200 hover:border-[#3c0f6e] hover:bg-[#faf8ff] transition-all group"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-[20px]">🚚</span>
+                <div className="flex-1">
+                  <h3 className="font-bold text-[15px] text-[#0f172a] group-hover:text-[#3c0f6e]">Our Transporter Network</h3>
+                  <p className="text-[12.5px] text-gray-500 mt-1 leading-[1.5]">
+                    I need to send a parcel. Connect to transporters within 5km.
+                  </p>
+                </div>
+              </div>
+            </button>
+
+            {/* MANAGEMENT */}
+            <button
+              onClick={onSelectManagement}
+              className="w-full text-left p-4 rounded-[14px] border border-gray-200 hover:border-[#3c0f6e] hover:bg-[#faf8ff] transition-all group"
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-[20px]">🏢</span>
+                <div className="flex-1">
+                  <h3 className="font-bold text-[15px] text-[#0f172a] group-hover:text-[#3c0f6e]">Management & Support</h3>
+                  <p className="text-[12.5px] text-gray-500 mt-1 leading-[1.5]">
+                    General inquiries, partnerships, or support.
+                  </p>
+                </div>
+              </div>
+            </button>
           </div>
-        </button>
+
+          <p className="text-[11px] text-center text-gray-400 mt-8">
+            Tip: Only registered clients can send voice notes
+          </p>
+        </div>
       </div>
 
-      <p className="text-[11.5px] text-center text-gray-500 mt-7 leading-snug">
-        Tip: Only registered clients can send voice notes to transporters.
-      </p>
+      {/* FOOTER INPUT FAKE - Like Shopify "Work with Sidekick" to show it's chat */}
+      <div className="p-4 border-t border-gray-100 shrink-0">
+        <div className="w-full bg-gray-100 rounded-full px-4 py-3 text-[13px] text-gray-400 text-center">
+          Select an option to start
+        </div>
+      </div>
     </div>
   );
 }
