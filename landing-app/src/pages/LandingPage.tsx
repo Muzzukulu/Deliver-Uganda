@@ -175,12 +175,19 @@ export default function LandingPage() {
       </section>
 
       <section id="track" className="py-16 px-6 bg-[#FAF7FF] border-y border-[#ede6ff]">
-        <h2 className="font-bold text-[24px] text-center text-[#3C1F6B]">Track Your Parcel</h2>
-        <p className="text-center text-[13px] text-gray-500 mt-2">Enter your tracking code below to see current status and location.</p>
-        <div className="max-w-[680px] mx-auto flex flex-col sm:flex-row gap-3 mt-8">
-          <input value={trackCode} onChange={(e)=>setTrackCode(e.target.value)} onKeyDown={(e)=> e.key==='Enter' && handleTrack()} placeholder="Enter Tracking Code, e.g. DU123456789" className="flex-1 h-[48px] px-5 rounded-xl bg-white border-2 border-[#e9d5ff] text-[13px] outline-none focus:border-[#3d1560]" />
-          <button onClick={handleTrack} className="bg-[#3d1560] text-white px-8 h-[48px] rounded-xl font-bold text-[14px] hover:bg-[#2d0f47] w-full sm:w-auto">Track</button>
-        </div>
+  <h2 className="font-bold text-[24px] text-center text-[#3C1F6B]">Track Your Parcel</h2>
+  <p className="text-center text-[13px] text-gray-500 mt-2">Enter your tracking code below to see current status and location.</p>
+
+  <div className="max-w-[680px] mx-auto flex flex-col sm:flex-row gap-3 mt-8 w-full box-border">
+    <input value={trackCode} onChange={(e)=>setTrackCode(e.target.value)} onKeyDown={(e)=> e.key==='Enter' && handleTrack()} placeholder="Enter Tracking Code, e.g. DU26-5634-Q10" className="flex-1 min-w-0 w-0 sm:w-auto h-[46px] px-5 rounded-xl bg-white border-2 border-[#e9d5ff] text-[14px] outline-none focus:border-[#3d1560] placeholder:text-gray-400 box-border" />
+    <button
+      onClick={handleTrack}
+      className="bg-[#3d1560] text-white px-8 h-[46px] rounded-xl font-bold text-[14px] hover:bg-[#2d0f47] w-full sm:w-auto shrink-0"
+    >
+      Track
+    </button>
+  </div>
+
         {trackError && <div className="max-w-[680px] mx-auto mt-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-[13px] text-center">{trackError}</div>}
         {trackResult && (
           <div className="max-w-[680px] mx-auto mt-6 bg-white border-2 border-[#e9d5ff] rounded-2xl p-6 shadow-sm">
